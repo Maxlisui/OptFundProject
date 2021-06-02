@@ -9,3 +9,7 @@
 /?/
 *.pdf
 *.jpg
+gradlew
+gradlew.bat
+.gradle
+gradle
