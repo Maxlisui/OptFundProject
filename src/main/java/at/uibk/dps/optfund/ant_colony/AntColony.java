@@ -7,7 +7,7 @@ import java.util.Collection;
 public interface AntColony {
 
     void init(AbstractAntNode startNode);
-    Collection<AbstractAntNode> next(Collection<AbstractAntNode> nodes);
+    Collection<AbstractAntNode> next();
 
 
 }

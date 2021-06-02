@@ -12,8 +12,7 @@ public abstract class AbstractAntEdge {
         return pheromone;
     }
 
-    public void updatePheromone(double p, int numberOfAnts) {
-
+    public void setPheromone(double pheromone) {
+        this.pheromone = pheromone;
     }
-
 }

@@ -11,13 +11,22 @@ import org.opt4j.viewer.ViewerModule;
 public class Main {
 
     public static void main(String[] args) {
+        int numberOfCities = 20;
+
         AntColonyModule ants = new AntColonyModule();
+        ants.setAlpha(1);
+        ants.setBeta(5);
+        ants.setRo(0.5);
+        ants.setQ(500);
+        ants.setNumberOfAnts((int)(numberOfCities * 0.8));
 
         AntOptimizerModule ea = new AntOptimizerModule();
         ea.setIterations(500);
-        ea.setPopulationSize(2);
+        ea.setPopulationSize(10);
 
         SalesmanModule salesman = new SalesmanModule();
+        salesman.setSize(numberOfCities);
+
         SalesmanWidgetModule widget = new SalesmanWidgetModule();
         ViewerModule viewer = new ViewerModule();
         viewer.setCloseOnStop(false);

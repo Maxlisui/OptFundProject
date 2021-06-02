@@ -13,6 +13,8 @@ public class AntColonyModule extends Opt4JModule {
     protected double beta;
     @Constant(value = "ro")
     protected double ro;
+    @Constant(value = "q")
+    protected double q;
 
     public int getNumberOfAnts() {
         return numberOfAnts;
@@ -44,6 +46,14 @@ public class AntColonyModule extends Opt4JModule {
 
     public void setRo(double ro) {
         this.ro = ro;
+    }
+
+    public double getQ() {
+        return q;
+    }
+
+    public void setQ(double q) {
+        this.q = q;
     }
 
     @Override

@@ -38,9 +38,12 @@ public class AntOptimizer implements IterativeOptimizer {
         this.offSize = offSize;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void initialize() {
         selector.init(offSize + populationSize);
+        PermutationGenotype<AbstractAntNode> genotype = (PermutationGenotype<AbstractAntNode>) individualFactory.create().getGenotype();
+        antColony.init(genotype.get(0));
     }
 
     @Override
@@ -58,10 +61,7 @@ public class AntOptimizer implements IterativeOptimizer {
 
             Collection<Individual> parents = selector.getParents(populationSize, population);
             for (Individual parent : parents) {
-                PermutationGenotype<AbstractAntNode> parentGenotype = (PermutationGenotype<AbstractAntNode>) parent.getGenotype();
-                PermutationGenotype<AbstractAntNode> genotype = copy.copy(parentGenotype);
-
-
+                PermutationGenotype<AbstractAntNode> genotype = new PermutationGenotype<>(antColony.next());
 
                 Individual child = individualFactory.create(genotype);
                 population.add(child);
