@@ -9,7 +9,6 @@ import org.opt4j.core.genotype.PermutationGenotype;
 import org.opt4j.core.optimizer.IterativeOptimizer;
 import org.opt4j.core.optimizer.Population;
 import org.opt4j.core.start.Constant;
-import org.opt4j.operators.copy.Copy;
 import org.opt4j.optimizers.ea.Selector;
 
 import java.util.Collection;
@@ -17,7 +16,6 @@ import java.util.Collection;
 public class AntOptimizer implements IterativeOptimizer {
 
     private final IndividualFactory individualFactory;
-    private final Copy<PermutationGenotype<AbstractAntNode>> copy;
     private final Selector selector;
     private final Population population;
     private final AntColony antColony;
@@ -25,12 +23,10 @@ public class AntOptimizer implements IterativeOptimizer {
     private final int offSize;
 
     @Inject
-    public AntOptimizer(IndividualFactory individualFactory, Copy<PermutationGenotype<AbstractAntNode>> copy,
-                        Selector selector, Population population, AntColony antColony,
+    public AntOptimizer(IndividualFactory individualFactory, Selector selector, Population population, AntColony antColony,
                         @Constant(value = "populationSize") int populationSize,
                         @Constant(value = "offSize") int offSize) {
         this.individualFactory = individualFactory;
-        this.copy = copy;
         this.selector = selector;
         this.population = population;
         this.antColony = antColony;
@@ -47,7 +43,6 @@ public class AntOptimizer implements IterativeOptimizer {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void next() {
         if(population.isEmpty()){
             for(int i = 0; i < populationSize; i++) {
@@ -59,13 +54,9 @@ public class AntOptimizer implements IterativeOptimizer {
                 population.removeAll(lames);
             }
 
-            Collection<Individual> parents = selector.getParents(populationSize, population);
-            for (Individual parent : parents) {
-                PermutationGenotype<AbstractAntNode> genotype = new PermutationGenotype<>(antColony.next());
-
-                Individual child = individualFactory.create(genotype);
-                population.add(child);
-            }
+            PermutationGenotype<AbstractAntNode> genotype = new PermutationGenotype<>(antColony.next());
+            Individual child = individualFactory.create(genotype);
+            population.add(child);
         }
     }
 }

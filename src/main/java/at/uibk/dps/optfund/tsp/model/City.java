@@ -12,7 +12,9 @@ public class City extends AbstractAntNode {
 
     private final double x;
     private final double y;
-    private Map<City, Street> neighbours = new HashMap<>();
+    private final Map<City, Street> neighbours = new HashMap<>();
+    private ImmutableMap<AbstractAntNode, AbstractAntEdge> neighboursImmutable = null;
+    private int javasSlowFuckingHash = -1;
 
     public City(double x, double y) {
         this.x = x;
@@ -36,16 +38,22 @@ public class City extends AbstractAntNode {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         City city = (City) o;
-        return Double.compare(city.x, x) == 0 && Double.compare(city.y, y) == 0;
+        return this.javasSlowFuckingHash == city.javasSlowFuckingHash;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(x, y);
+        if (javasSlowFuckingHash == -1) {
+            javasSlowFuckingHash = Objects.hash(x, y);
+        }
+        return javasSlowFuckingHash;
     }
 
     @Override
     public ImmutableMap<AbstractAntNode, AbstractAntEdge> getNeighbours() {
-        return ImmutableMap.copyOf(neighbours);
+        if(neighboursImmutable == null) {
+            neighboursImmutable = ImmutableMap.copyOf(neighbours);
+        }
+        return neighboursImmutable;
     }
 }

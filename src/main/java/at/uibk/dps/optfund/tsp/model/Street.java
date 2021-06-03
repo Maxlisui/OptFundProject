@@ -40,7 +40,7 @@ public class Street extends AbstractAntEdge {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Street street = (Street) o;
-        return Objects.equals(cityA, street.cityA) && Objects.equals(cityB, street.cityB);
+        return cityA.hashCode() == street.cityA.hashCode() && cityB.hashCode() == cityB.hashCode();
     }
 
     @Override

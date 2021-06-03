@@ -16,6 +16,7 @@ public class AntColonyImpl implements AntColony {
     private final double ro;
     private final double q;
     private final ArrayList<Ant> ants = new ArrayList<>();
+    private final Object lock = new Object();
 
     @Inject
     public AntColonyImpl(@Constant(value = "numberOfAnts") int numberOfAnts,
@@ -32,8 +33,9 @@ public class AntColonyImpl implements AntColony {
 
     @Override
     public void init(AbstractAntNode startNode) {
+        int numberOfCities = startNode.getNeighbours().values().size() + 1;
         for(int i = 0; i < numberOfAnts; i++) {
-            ants.add(new Ant(i, startNode));
+            ants.add(new Ant(i, startNode, numberOfCities));
         }
     }
 
@@ -41,9 +43,13 @@ public class AntColonyImpl implements AntColony {
     public Collection<AbstractAntNode> next() {
         Map<Ant, AntPath> pathsPerAnt = new HashMap<>();
 
-        for (Ant a : ants) {
-            pathsPerAnt.put(a, a.getPath(alpha, beta));
-        }
+        ants.parallelStream().forEach(x -> {
+            AntPath path = x.getPath(alpha, beta);
+
+            synchronized (lock) {
+                pathsPerAnt.put(x, path);
+            }
+        });
 
         updatePheromone(pathsPerAnt);
 

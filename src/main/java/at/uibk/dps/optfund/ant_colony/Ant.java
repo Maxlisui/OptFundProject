@@ -9,14 +9,16 @@ import java.util.*;
 public class Ant {
 
     private final int antIndex;
+    private final int numberOfCities;
     private final AbstractAntNode startNode;
     private final Set<AbstractAntEdge> usedEdges = new HashSet<>();
     private final Set<AbstractAntNode> seenNodes = new HashSet<>();
     private final Random rnd = new Random(0);
 
-    public Ant(int antIndex, AbstractAntNode startNode) {
+    public Ant(int antIndex, AbstractAntNode startNode, int numberOfCities) {
         this.antIndex = antIndex;
         this.startNode = startNode;
+        this.numberOfCities = numberOfCities;
     }
 
     public AntPath getPath(double alpha, double beta) {
@@ -24,6 +26,9 @@ public class Ant {
         AbstractAntNode currentNode = startNode;
         List<AbstractAntNode> nodes = new ArrayList<>();
         List<AbstractAntEdge> edges = new ArrayList<>();
+
+        nodes.add(currentNode);
+        seenNodes.add(currentNode);
 
         do {
             AbstractAntEdge edge = step(currentNode, alpha, beta);
@@ -43,7 +48,7 @@ public class Ant {
     }
 
     private AbstractAntEdge step(AbstractAntNode currentNode, double alpha, double beta) {
-        AbstractAntEdge edge = getNextEdge(currentNode.getNeighbours().values().asList(), alpha, beta);
+        AbstractAntEdge edge = getNextEdge(currentNode, alpha, beta);
 
         usedEdges.add(edge);
         currentNode = edge.getB();
@@ -68,13 +73,33 @@ public class Ant {
         return Objects.hash(antIndex);
     }
 
-    private AbstractAntEdge getNextEdge(List<AbstractAntEdge> edges, double alpha, double beta) {
+    private AbstractAntEdge getNextEdge(AbstractAntNode currentNode, double alpha, double beta) {
+        if(seenNodes.size() == numberOfCities) {
+            return currentNode.getNeighbours().get(startNode);
+        }
+
+        List<AbstractAntEdge> possible = getPossibleEdges(currentNode.getNeighbours().values().asList());
+
         double minProp = 0.0;
         AbstractAntEdge bestEdge = null;
 
-        for(AbstractAntEdge e : edges) {
+        for(AbstractAntEdge e : possible) {
+            double sumFactorBot = 0.0;
+            boolean ignore = false;
+
+            for(AbstractAntEdge poss : possible) {
+                if (poss.equals(e)) {
+                    ignore = true;
+                    break;
+                }
+                sumFactorBot += getFactor(poss.getPheromone(), poss.getDistance(), alpha, beta);
+            }
+
+            if(ignore) {
+                continue;
+            }
+
             double factorTop = getFactor(e.getPheromone(), e.getDistance(), alpha, beta);
-            double sumFactorBot = getAllEdgesExcept(e, edges).stream().mapToDouble(x -> getFactor(x.getPheromone(), x.getDistance(), alpha, beta)).sum();
 
             double prop = factorTop / sumFactorBot;
             if(prop > minProp) {
@@ -84,27 +109,37 @@ public class Ant {
         }
 
         if (bestEdge == null) {
-            bestEdge = edges.get(rnd.nextInt(edges.size()));
+            do {
+                bestEdge = possible.get(rnd.nextInt(possible.size()));
+            } while (bestEdge.getB().equals(startNode));
         }
 
         return bestEdge;
     }
 
-    private Collection<AbstractAntEdge> getAllEdgesExcept(AbstractAntEdge except, Collection<AbstractAntEdge> possible) {
-        Collection<AbstractAntEdge> edges = new ArrayList<>(possible.size() - 1);
+    private List<AbstractAntEdge> getPossibleEdges(List<AbstractAntEdge> possible) {
+        if(seenNodes.isEmpty()) {
+            return possible;
+        }
 
-        for(AbstractAntEdge e : possible) {
-            if(!except.equals(e) && !seenNodes.contains(e.getB())) {
-                edges.add(e);
+        List<AbstractAntEdge> edges = new ArrayList<>(possible.size() - 1);
+
+
+        //noinspection ForLoopReplaceableByForEach
+        for(int i = 0; i < possible.size(); i++) {
+            AbstractAntEdge e = possible.get(i);
+            if(seenNodes.contains(e.getB())) {
+                continue;
             }
+            edges.add(e);
         }
         return edges;
     }
 
     private double getFactor(double pheromone, double distance, double alpha, double beta) {
-        double tauXY = Math.pow(pheromone, alpha);
-        double nuXZ = Math.pow(distance, beta);
-        return tauXY * nuXZ;
+        double tau = Math.pow(pheromone, alpha);
+        double nu = Math.pow(distance, beta);
+        return tau * nu;
     }
 
 }
