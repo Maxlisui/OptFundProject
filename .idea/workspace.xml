@@ -5,14 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="28fa8dde-8206-4387-95b9-4799b6f16325" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/Ant.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/Ant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/AntColony.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/AntColony.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/AntColonyImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/AntColonyImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/model/AbstractAntEdge.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/model/AbstractAntEdge.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/model/AbstractAntNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/model/AbstractAntNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/model/AntPath.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/model/AntPath.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/optimizer/AntOptimizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/optimizer/AntOptimizer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/tsp/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/tsp/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/tsp/model/City.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/tsp/model/City.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/tsp/model/Street.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/tsp/model/Street.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/optimizer/AntOptimizerModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/optimizer/AntOptimizerModule.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -180,7 +181,7 @@
       <option name="presentableId" value="Default" />
       <updated>1622614696177</updated>
       <workItem from="1622614701234" duration="40101000" />
-      <workItem from="1622740904190" duration="9527000" />
+      <workItem from="1622740904190" duration="13051000" />
     </task>
     <servers />
   </component>

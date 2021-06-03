@@ -6,31 +6,52 @@ import at.uibk.dps.optfund.ant_colony.model.AntPath;
 
 import java.util.*;
 
+/**
+ * Represents a ant in an ant colony
+ */
 public class Ant {
 
     private final int antIndex;
-    private final int numberOfCities;
+    private final int numberOfNodes;
     private final AbstractAntNode startNode;
     private final Set<AbstractAntEdge> usedEdges = new HashSet<>();
     private final Set<AbstractAntNode> seenNodes = new HashSet<>();
     private final Random rnd = new Random(0);
 
-    public Ant(int antIndex, AbstractAntNode startNode, int numberOfCities) {
+    /**
+     * Creates a new instance of an ant
+     * @param antIndex An ant index, which is used for comparing ants
+     * @param startNode The ants start node
+     * @param numberOfNodes The number of total nodes
+     */
+    public Ant(int antIndex, AbstractAntNode startNode, int numberOfNodes) {
         this.antIndex = antIndex;
         this.startNode = startNode;
-        this.numberOfCities = numberOfCities;
+        this.numberOfNodes = numberOfNodes;
     }
 
+    /**
+     * Computes the path which the ant will take of the current state of the graph
+     * @param alpha Alpha value used for computing the probability which edge to take
+     * @param beta Beta value used for computing the probability which edge to take
+     * @return An instance of an {@link AntPath}
+     */
     public AntPath getPath(double alpha, double beta) {
+        // First reset the ant and initialize the results
         reset();
         AbstractAntNode currentNode = startNode;
         List<AbstractAntNode> nodes = new ArrayList<>();
         List<AbstractAntEdge> edges = new ArrayList<>();
 
+        // First we add the currentNode (startNode) to the seen nodes and the result nodes.
         nodes.add(currentNode);
         seenNodes.add(currentNode);
 
+        // As long as the ant is not on the start node we let the ant move through the graph.
+        // Further implementation will check to not hit a node multiple times
         do {
+            // Get the next edge and add it to the result
+            // The ant is now on the other side of the edge
             AbstractAntEdge edge = step(currentNode, alpha, beta);
 
             currentNode = edge.getB();
@@ -39,27 +60,24 @@ public class Ant {
 
         } while (!currentNode.equals(startNode));
 
+        // Create a new ant path and return it
         return new AntPath(edges, nodes);
     }
 
-    private void reset() {
-        usedEdges.clear();
-        seenNodes.clear();
-    }
-
-    private AbstractAntEdge step(AbstractAntNode currentNode, double alpha, double beta) {
-        AbstractAntEdge edge = getNextEdge(currentNode, alpha, beta);
-
-        usedEdges.add(edge);
-        currentNode = edge.getB();
-        seenNodes.add(currentNode);
-        return edge;
-    }
-
+    /**
+     * Returns whether the ant used the given edge on its path
+     * @param edge The edge to check
+     * @return Whether the ant has seen this edge
+     */
     public boolean hasUsedEdge(AbstractAntEdge edge) {
         return usedEdges.contains(edge);
     }
 
+    /**
+     * Determines whether this ant is equal to another ant
+     * @param o The other ant
+     * @return Whether this ant is equal to the given ant
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -68,25 +86,60 @@ public class Ant {
         return antIndex == ant.antIndex;
     }
 
+    /**
+     * Returns the hashcode for this ant
+     * @return The hashcode for this ant
+     */
     @Override
     public int hashCode() {
         return Objects.hash(antIndex);
     }
 
+    private void reset() {
+        // Clear all used edges and seen node for a new calculation
+        usedEdges.clear();
+        seenNodes.clear();
+    }
+
+    private AbstractAntEdge step(AbstractAntNode currentNode, double alpha, double beta) {
+        // First get the next node, based on the ACO algorithm
+        // And add it to the other side to the seen nodes and the used edges
+        AbstractAntEdge edge = getNextEdge(currentNode, alpha, beta);
+
+        usedEdges.add(edge);
+        currentNode = edge.getB();
+        seenNodes.add(currentNode);
+        return edge;
+    }
+
     private AbstractAntEdge getNextEdge(AbstractAntNode currentNode, double alpha, double beta) {
-        if(seenNodes.size() == numberOfCities) {
+        // Here we calculate the next edge the ant will take based on the ACO algorithm
+
+        // If the ant has seen the same number of nodes as there are nodes in the graph,
+        // the ant has to go to the end/start node
+        // This is just an optimization, the rest of the algorithm would yield the same edge
+        if(seenNodes.size() == numberOfNodes) {
             return currentNode.getNeighbours().get(startNode);
         }
 
+        // Get all edges which can be used by the ant
         List<AbstractAntEdge> possible = getPossibleEdges(currentNode.getNeighbours().values().asList());
 
+        // Now do the actual ACO calculation
+        // bestEdge will contain the edge the with the highest probability.
         double minProp = 0.0;
         AbstractAntEdge bestEdge = null;
 
         for(AbstractAntEdge e : possible) {
+            // Algorithm
+            // p = factorTop / sumFactorBot
+            // where sumFactorBot = sum(z -> z.pheromone^alpha * (1/z.distance)^beta, possible)
+            // and factorTop = e.pheromone^alpha * (1/e.distance)^beta
+
             double sumFactorBot = 0.0;
             boolean ignore = false;
 
+            // Calculate the factorBot first, one edge in possible can be the current edge -> ignore the current edge
             for(AbstractAntEdge poss : possible) {
                 if (poss.equals(e)) {
                     ignore = true;
@@ -99,8 +152,10 @@ public class Ant {
                 continue;
             }
 
+            // Calculate the factorTop
             double factorTop = getFactor(e.getPheromone(), e.getDistance(), alpha, beta);
 
+            // Finally calculate the probability, if it is higher than the current best, set the best edge to the current.
             double prop = factorTop / sumFactorBot;
             if(prop > minProp) {
                 minProp = prop;
@@ -108,6 +163,9 @@ public class Ant {
             }
         }
 
+        // If no ant has discovered any of the edges all probabilities will be zero,
+        // so there won't be a best edge
+        // In this case just take any edge (however not an edge which will lead to the start/end node)
         if (bestEdge == null) {
             do {
                 bestEdge = possible.get(rnd.nextInt(possible.size()));
@@ -118,6 +176,7 @@ public class Ant {
     }
 
     private List<AbstractAntEdge> getPossibleEdges(List<AbstractAntEdge> possible) {
+        // The ant has not seen any node yet, just return all edges.
         if(seenNodes.isEmpty()) {
             return possible;
         }
@@ -125,9 +184,12 @@ public class Ant {
         List<AbstractAntEdge> edges = new ArrayList<>(possible.size() - 1);
 
 
+        // A for loop is faster in this case
         //noinspection ForLoopReplaceableByForEach
         for(int i = 0; i < possible.size(); i++) {
             AbstractAntEdge e = possible.get(i);
+
+            // Ignore nodes which the ant already visited
             if(seenNodes.contains(e.getB())) {
                 continue;
             }
@@ -137,8 +199,9 @@ public class Ant {
     }
 
     private double getFactor(double pheromone, double distance, double alpha, double beta) {
+        // Calculate the factor for the ACO
         double tau = Math.pow(pheromone, alpha);
-        double nu = Math.pow(distance, beta);
+        double nu = Math.pow(1 / distance, beta);
         return tau * nu;
     }
 

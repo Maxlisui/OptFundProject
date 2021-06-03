@@ -8,6 +8,9 @@ import org.opt4j.core.start.Constant;
 
 import java.util.*;
 
+/**
+ * An implementation for an ant colony
+ */
 public class AntColonyImpl implements AntColony {
 
     private final int numberOfAnts;

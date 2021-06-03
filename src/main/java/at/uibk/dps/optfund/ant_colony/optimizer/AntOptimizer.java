@@ -13,6 +13,9 @@ import org.opt4j.optimizers.ea.Selector;
 
 import java.util.Collection;
 
+/**
+ * The implementation of the ant optimizer for {@link IterativeOptimizer}
+ */
 public class AntOptimizer implements IterativeOptimizer {
 
     private final IndividualFactory individualFactory;
@@ -22,6 +25,15 @@ public class AntOptimizer implements IterativeOptimizer {
     private final int populationSize;
     private final int offSize;
 
+    /**
+     * Creates a new instance of the ant optimizer
+     * @param individualFactory An factory to create new {@link Individual}
+     * @param selector Selector which selects {@link Individual} to consider
+     * @param population The population of the optimizer
+     * @param antColony The ant colony implementation
+     * @param populationSize The maximal population size
+     * @param offSize The offsize, of {@link Individual} to remove
+     */
     @Inject
     public AntOptimizer(IndividualFactory individualFactory, Selector selector, Population population, AntColony antColony,
                         @Constant(value = "populationSize") int populationSize,
@@ -34,26 +46,40 @@ public class AntOptimizer implements IterativeOptimizer {
         this.offSize = offSize;
     }
 
+    /**
+     * Initializes the optimizer.
+     * Initializes the selector and the ant colony
+     */
     @SuppressWarnings("unchecked")
     @Override
     public void initialize() {
         selector.init(offSize + populationSize);
+
+        // The ant colony needs to know the start node, so we create a new genotype and get their first element.
+        // This node will be used as the start/end node for all future calculations
         PermutationGenotype<AbstractAntNode> genotype = (PermutationGenotype<AbstractAntNode>) individualFactory.create().getGenotype();
         antColony.init(genotype.get(0));
     }
 
+    /**
+     * On step of the optimizer
+     * Each step creates a new {@link PermutationGenotype<AbstractAntNode>} which will be added to the node.
+     */
     @Override
     public void next() {
+        // Initialize the population if empty
         if(population.isEmpty()){
             for(int i = 0; i < populationSize; i++) {
                 population.add(individualFactory.create());
             }
         } else {
+            // Remove lame elements from the population
             if (population.size() > populationSize) {
                 Collection<Individual> lames = selector.getLames(population.size() - populationSize, population);
                 population.removeAll(lames);
             }
 
+            // Let the ant colony create a new genotype and add it to the population
             PermutationGenotype<AbstractAntNode> genotype = new PermutationGenotype<>(antColony.next());
             Individual child = individualFactory.create(genotype);
             population.add(child);
