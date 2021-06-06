@@ -109,17 +109,15 @@ public class AntColonyImpl implements AntColony {
      * @param paths the paths the ants traveled
      */
     private void updatePheromone(Map<Ant, AntPath> paths) {
-
-        for(AbstractAntEdge edge : this.edges) {
-
-            double newPheromone = pheromoneFactor * edge.getPheromone();
+        this.edges.parallelStream().forEach(x -> {
+            double newPheromone = pheromoneFactor * x.getPheromone();
             for(Ant ant : ants) {
-                newPheromone += ant.hasUsedEdge(edge)
+                newPheromone += ant.hasUsedEdge(x)
                         ? q / paths.get(ant).getCost()
                         : 0;
             }
-            edge.setPheromone(newPheromone);
-        }
+            x.setPheromone(newPheromone);
+        });
     }
 
     /**

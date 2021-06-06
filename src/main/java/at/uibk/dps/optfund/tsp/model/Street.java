@@ -9,7 +9,8 @@ public class Street extends AbstractAntEdge {
 
     protected final City cityA;
     protected final City cityB;
-    private double distance;
+    private final double distance;
+    private int javasSlowFuckingHash = -1;
 
     public Street(City cityA, City cityB) {
         this.cityA = cityA;
@@ -42,6 +43,9 @@ public class Street extends AbstractAntEdge {
 
     @Override
     public int hashCode() {
-        return Objects.hash(cityA, cityB);
+        if(javasSlowFuckingHash == -1) {
+            javasSlowFuckingHash = Objects.hash(cityA, cityB);
+        }
+        return javasSlowFuckingHash;
     }
 }

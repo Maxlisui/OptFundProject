@@ -96,7 +96,7 @@ public class Ant {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(antIndex);
+        return antIndex;
     }
 
     private void reset() {
@@ -133,7 +133,7 @@ public class Ant {
         }
 
         // Now do the actual ACO calculation
-        HashMap<AbstractAntEdge, Double> factors = new HashMap<>();
+        HashMap<AbstractAntEdge, Double> factors = new HashMap<>(possible.size() + 1);
         double sumFactorBot = 0.0;
 
         // calculate the factor for each possible edge
@@ -173,7 +173,7 @@ public class Ant {
             return possible;
         }
 
-        List<AbstractAntEdge> edges = new ArrayList<>(possible.size() - 1);
+        List<AbstractAntEdge> edges = new ArrayList<>(possible.size());
 
 
         // A for loop is faster in this case
