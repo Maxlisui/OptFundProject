@@ -1,5 +1,7 @@
 package at.uibk.dps.optfund.ant_colony.optimizer;
 
+import org.opt4j.core.config.annotations.Info;
+import org.opt4j.core.config.annotations.Order;
 import org.opt4j.core.optimizer.MaxIterations;
 import org.opt4j.core.optimizer.OptimizerModule;
 import org.opt4j.core.start.Constant;
@@ -10,28 +12,15 @@ import org.opt4j.core.start.Constant;
  */
 public class AntOptimizerModule extends OptimizerModule {
 
-    @MaxIterations
-    protected int iterations = 1000;
     @Constant(value = "populationSize")
     protected int populationSize = 100;
     @Constant(value = "offSize")
     protected int offSize = 25;
 
-    /**
-     * Gets the number of iterations
-     * @return The number of iteration
-     */
-    public int getIterations() {
-        return iterations;
-    }
-
-    /**
-     * sets the number of iterations
-     * @param iterations The new number of iteration
-     */
-    public void setIterations(int iterations) {
-        this.iterations = iterations;
-    }
+    @Info("The number of iterations.")
+    @Order(3)
+    @MaxIterations
+    protected int iterations = 1000;
 
     /**
      * Gets the population size
@@ -64,6 +53,12 @@ public class AntOptimizerModule extends OptimizerModule {
     public void setOffSize(int offSize) {
         this.offSize = offSize;
     }
+
+    public void setIterations(int iterations) {
+        this.iterations = iterations;
+    }
+
+    public int getIterations() { return iterations; }
 
     /**
      * Configures the module with {@link AntOptimizer}

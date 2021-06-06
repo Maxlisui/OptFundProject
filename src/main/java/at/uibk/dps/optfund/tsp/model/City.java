@@ -19,6 +19,9 @@ public class City extends AbstractAntNode {
     public City(double x, double y) {
         this.x = x;
         this.y = y;
+
+        // add implicit street to self -> distance 0
+        this.addNeighbour(this);
     }
 
     public double getX() {
@@ -31,6 +34,10 @@ public class City extends AbstractAntNode {
 
     public void addNeighbour(City city) {
         neighbours.put(city, new Street(this, city));
+    }
+
+    public Street getStreet(City neighbor) {
+        return neighbours.get(neighbor);
     }
 
     @Override

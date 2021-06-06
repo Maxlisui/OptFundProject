@@ -35,7 +35,7 @@ public class Main {
 
             AntOptimizerModule ea = new AntOptimizerModule();
             ea.setIterations(iterations);
-            ea.setPopulationSize(10);
+            ea.setPopulationSize(iterations);
             ea.setOffSize(2);
 
             SalesmanModule salesman = new SalesmanModule();

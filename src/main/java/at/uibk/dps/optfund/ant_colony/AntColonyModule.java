@@ -1,28 +1,42 @@
 package at.uibk.dps.optfund.ant_colony;
 
+import at.uibk.dps.optfund.ant_colony.selector.GreedySelector;
+import at.uibk.dps.optfund.ant_colony.selector.Selector;
+import org.opt4j.core.config.annotations.Info;
+import org.opt4j.core.config.annotations.Order;
+import org.opt4j.core.optimizer.OptimizerModule;
 import org.opt4j.core.start.Constant;
-import org.opt4j.core.start.Opt4JModule;
 
-public class AntColonyModule extends Opt4JModule {
+public class AntColonyModule extends OptimizerModule {
 
-    @Constant(value = "numberOfAnts")
-    protected int numberOfAnts;
-    @Constant(value = "alpha")
-    protected double alpha;
-    @Constant(value = "beta")
-    protected double beta;
-    @Constant(value = "ro")
-    protected double ro;
-    @Constant(value = "q")
-    protected double q;
+    @Info("The number of ants.")
+    @Order(0)
+    @Constant(value = "numberOfAnts", namespace = AntColonyImpl.class)
+    protected int numberOfAnts = 1000;
 
-    public int getNumberOfAnts() {
-        return numberOfAnts;
-    }
+    @Info("The alpha value (weight of pheromones).")
+    @Order(1)
+    @Constant(value = "alpha", namespace = AntColonyImpl.class)
+    protected double alpha = 1.0;
 
-    public void setNumberOfAnts(int numberOfAnts) {
-        this.numberOfAnts = numberOfAnts;
-    }
+    @Info("The beta value (weight of paths).")
+    @Order(2)
+    @Constant(value = "beta", namespace = AntColonyImpl.class)
+    protected double beta = 1.0;
+
+    @Info("The pheromone decay rate.")
+    @Order(3)
+    @Constant(value = "ro", namespace = AntColonyImpl.class)
+    protected double ro = 0.5;
+
+    @Info("The pheromone value.")
+    @Order(4)
+    @Constant(value = "q", namespace = AntColonyImpl.class)
+    protected double q = 500;
+
+    public int getNumberOfAnts() { return numberOfAnts; }
+
+    public void setNumberOfAnts(int numberOfAnts) { this.numberOfAnts = numberOfAnts; }
 
     public double getAlpha() {
         return alpha;
@@ -59,5 +73,6 @@ public class AntColonyModule extends Opt4JModule {
     @Override
     protected void config() {
         bind(AntColony.class).to(AntColonyImpl.class);
+        bind(Selector.class).to(GreedySelector.class);
     }
 }

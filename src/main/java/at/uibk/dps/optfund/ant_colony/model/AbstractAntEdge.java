@@ -5,7 +5,9 @@ package at.uibk.dps.optfund.ant_colony.model;
  */
 public abstract class AbstractAntEdge {
 
-    private double pheromone = 0.0;
+    // initialize each edge with some amount of pheromone
+    // this prevents initial problems with zero-probabilities
+    private double pheromone = 1.0;
 
     /**
      * Gets the origin node from the edge

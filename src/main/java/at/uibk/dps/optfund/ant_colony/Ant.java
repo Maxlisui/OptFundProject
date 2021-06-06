@@ -3,6 +3,7 @@ package at.uibk.dps.optfund.ant_colony;
 import at.uibk.dps.optfund.ant_colony.model.AbstractAntEdge;
 import at.uibk.dps.optfund.ant_colony.model.AbstractAntNode;
 import at.uibk.dps.optfund.ant_colony.model.AntPath;
+import at.uibk.dps.optfund.ant_colony.selector.Selector;
 
 import java.util.*;
 
@@ -17,17 +18,20 @@ public class Ant {
     private final Set<AbstractAntEdge> usedEdges = new HashSet<>();
     private final Set<AbstractAntNode> seenNodes = new HashSet<>();
     private final Random rnd = new Random(0);
+    private final Selector edgeSelector;
 
     /**
      * Creates a new instance of an ant
      * @param antIndex An ant index, which is used for comparing ants
      * @param startNode The ants start node
      * @param numberOfNodes The number of total nodes
+     * @param edgeSelector the selection algorithm for picking an edge
      */
-    public Ant(int antIndex, AbstractAntNode startNode, int numberOfNodes) {
+    public Ant(int antIndex, AbstractAntNode startNode, int numberOfNodes, Selector edgeSelector) {
         this.antIndex = antIndex;
         this.startNode = startNode;
         this.numberOfNodes = numberOfNodes;
+        this.edgeSelector = edgeSelector;
     }
 
     /**
@@ -124,54 +128,42 @@ public class Ant {
 
         // Get all edges which can be used by the ant
         List<AbstractAntEdge> possible = getPossibleEdges(currentNode.getNeighbours().values().asList());
+        if (possible.size() == 0) {
+            throw new IllegalArgumentException("list of possible edges must not be empty");
+        }
 
         // Now do the actual ACO calculation
-        // bestEdge will contain the edge the with the highest probability.
-        double minProp = 0.0;
-        AbstractAntEdge bestEdge = null;
+        HashMap<AbstractAntEdge, Double> factors = new HashMap<>();
+        double sumFactorBot = 0.0;
 
+        // calculate the factor for each possible edge
+        for(AbstractAntEdge poss : possible) {
+            double factor = getFactor(poss.getPheromone(), poss.getDistance(), alpha, beta);
+            sumFactorBot += factor;
+            factors.put(poss, factor);
+        }
+
+        List<Double> props = new LinkedList<>();
         for(AbstractAntEdge e : possible) {
             // Algorithm
             // p = factorTop / sumFactorBot
             // where sumFactorBot = sum(z -> z.pheromone^alpha * (1/z.distance)^beta, possible)
             // and factorTop = e.pheromone^alpha * (1/e.distance)^beta
 
-            double sumFactorBot = 0.0;
-            boolean ignore = false;
-
-            // Calculate the factorBot first, one edge in possible can be the current edge -> ignore the current edge
-            for(AbstractAntEdge poss : possible) {
-                if (poss.equals(e)) {
-                    ignore = true;
-                    break;
-                }
-                sumFactorBot += getFactor(poss.getPheromone(), poss.getDistance(), alpha, beta);
-            }
-
-            if(ignore) {
-                continue;
-            }
-
             // Calculate the factorTop
-            double factorTop = getFactor(e.getPheromone(), e.getDistance(), alpha, beta);
+            double factorTop = factors.get(e);
 
             // Finally calculate the probability, if it is higher than the current best, set the best edge to the current.
-            double prop = factorTop / sumFactorBot;
-            if(prop > minProp) {
-                minProp = prop;
-                bestEdge = e;
-            }
+            double prop = sumFactorBot != 0 ? factorTop / sumFactorBot : 0;
+
+            // add probability to list of propabilities
+            props.add(prop);
         }
 
-        // If no ant has discovered any of the edges all probabilities will be zero,
-        // so there won't be a best edge
-        // In this case just take any edge (however not an edge which will lead to the start/end node)
-        if (bestEdge == null) {
-            do {
-                bestEdge = possible.get(rnd.nextInt(possible.size()));
-            } while (bestEdge.getB().equals(startNode));
+        AbstractAntEdge bestEdge = this.edgeSelector.select(possible, props);
+        if(bestEdge == null) {
+            throw new IllegalArgumentException("best edge must not be null");
         }
-
         return bestEdge;
     }
 
@@ -189,6 +181,10 @@ public class Ant {
         for(int i = 0; i < possible.size(); i++) {
             AbstractAntEdge e = possible.get(i);
 
+            if(e.getB().equals(startNode)) {
+                continue;
+            }
+
             // Ignore nodes which the ant already visited
             if(seenNodes.contains(e.getB())) {
                 continue;
@@ -201,8 +197,8 @@ public class Ant {
     private double getFactor(double pheromone, double distance, double alpha, double beta) {
         // Calculate the factor for the ACO
         double tau = Math.pow(pheromone, alpha);
-        double nu = Math.pow(1 / distance, beta);
-        return tau * nu;
+        double ita = Math.pow(1 / distance, beta);
+        return tau * ita;
     }
 
 }

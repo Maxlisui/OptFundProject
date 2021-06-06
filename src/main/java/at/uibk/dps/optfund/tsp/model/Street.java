@@ -9,11 +9,15 @@ public class Street extends AbstractAntEdge {
 
     protected final City cityA;
     protected final City cityB;
-    private double distance = -1;
+    private double distance;
 
     public Street(City cityA, City cityB) {
         this.cityA = cityA;
         this.cityB = cityB;
+
+        final double x = cityA.getX() - cityB.getX();
+        final double y = cityA.getY() - cityB.getY();
+        this.distance = Math.sqrt(x * x + y * y);
     }
 
     @Override
@@ -26,14 +30,7 @@ public class Street extends AbstractAntEdge {
         return cityB;
     }
 
-    public double getDistance() {
-        if (distance < 0) {
-            final double x = cityA.getX() - cityB.getX();
-            final double y = cityA.getY() - cityB.getY();
-            distance = Math.sqrt(x * x + y * y);
-        }
-        return distance;
-    }
+    public double getDistance() { return distance; }
 
     @Override
     public boolean equals(Object o) {

@@ -3,6 +3,8 @@ package at.uibk.dps.optfund.ant_colony;
 import at.uibk.dps.optfund.ant_colony.model.AbstractAntEdge;
 import at.uibk.dps.optfund.ant_colony.model.AbstractAntNode;
 import at.uibk.dps.optfund.ant_colony.model.AntPath;
+import at.uibk.dps.optfund.ant_colony.selector.Selector;
+import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 import org.opt4j.core.start.Constant;
 
@@ -13,35 +15,55 @@ import java.util.*;
  */
 public class AntColonyImpl implements AntColony {
 
+    private final Selector edgeSelector;
     private final int numberOfAnts;
     private final double alpha;
     private final double beta;
-    private final double ro;
+    private final double pheromoneFactor;
     private final double q;
     private final ArrayList<Ant> ants = new ArrayList<>();
     private final Object lock = new Object();
 
+    private AbstractAntNode startNode = null;
+
+    /**
+     * @param edgeSelector the selector which decides which path should be taken
+     * @param numberOfAnts the number of ants
+     * @param alpha the pheromone weight
+     * @param beta the path length weight
+     * @param ro the pheromone decay rate
+     * @param q the pheromone level constant
+     */
     @Inject
-    public AntColonyImpl(@Constant(value = "numberOfAnts") int numberOfAnts,
-                         @Constant(value = "alpha") double alpha,
-                         @Constant(value = "beta") double beta,
-                         @Constant(value = "ro") double ro,
-                         @Constant(value = "q") double q) {
+    public AntColonyImpl(Selector edgeSelector,
+                         @Constant(value = "numberOfAnts", namespace = AntColonyImpl.class) int numberOfAnts,
+                         @Constant(value = "alpha", namespace = AntColonyImpl.class) double alpha,
+                         @Constant(value = "beta", namespace = AntColonyImpl.class) double beta,
+                         @Constant(value = "ro", namespace = AntColonyImpl.class) double ro,
+                         @Constant(value = "q", namespace = AntColonyImpl.class) double q) {
+        this.edgeSelector = edgeSelector;
         this.numberOfAnts = numberOfAnts;
         this.alpha = alpha;
         this.beta = beta;
-        this.ro = ro;
+        this.pheromoneFactor = 1 - ro;
         this.q = q;
     }
 
+    /**
+     * @param startNode The start node where all ants start
+     */
     @Override
     public void init(AbstractAntNode startNode) {
-        int numberOfCities = startNode.getNeighbours().values().size() + 1;
+        this.startNode = startNode;
+        int numberOfCities = startNode.getNeighbours().values().size();
         for(int i = 0; i < numberOfAnts; i++) {
-            ants.add(new Ant(i, startNode, numberOfCities));
+            ants.add(new Ant(i, startNode, numberOfCities, this.edgeSelector));
         }
     }
 
+    /**
+     * @return the best path of this iteration
+     */
     @Override
     public Collection<AbstractAntNode> next() {
         Map<Ant, AntPath> pathsPerAnt = new HashMap<>();
@@ -54,38 +76,51 @@ public class AntColonyImpl implements AntColony {
             }
         });
 
-        updatePheromone(pathsPerAnt);
+        updatePheromone(startNode, new HashSet<>(), pathsPerAnt);
 
         return getBestPath(pathsPerAnt.values());
     }
 
-    private void updatePheromone(Map<Ant, AntPath> paths) {
-        Set<AbstractAntEdge> alreadyDone = new HashSet<>();
-        final double factor = 1 - ro;
+    /**
+     * @param node the current node to update
+     * @param alreadyDone a set which contains all already visited edges
+     * @param paths the paths the ants traveled
+     */
+    private void updatePheromone(AbstractAntNode node, Set<AbstractAntEdge> alreadyDone, Map<Ant, AntPath> paths) {
 
-        for(AntPath p : paths.values()) {
-            for(AbstractAntEdge edge : p.getEdges()) {
-                if(alreadyDone.contains(edge)) {
-                    continue;
-                }
+        ImmutableMap<AbstractAntNode, AbstractAntEdge> neighbors = node.getNeighbours();
+        for(AbstractAntNode neighborNode : node.getNeighbours().keySet()) {
 
-                double newPheromone = factor * edge.getPheromone();
+            AbstractAntEdge edge = neighbors.get(neighborNode);
 
-                for(Ant ant : paths.keySet()) {
-                    newPheromone += ant.hasUsedEdge(edge)
-                            ? q / paths.get(ant).getCost()
-                            : 0;
-                }
-
-                edge.setPheromone(newPheromone);
-
-                alreadyDone.add(edge);
+            // check if edge has been processed
+            if(alreadyDone.contains(edge)) {
+                continue;
             }
+            alreadyDone.add(edge);
+
+            double newPheromone = pheromoneFactor * edge.getPheromone();
+
+            for(Ant ant : ants) {
+                newPheromone += ant.hasUsedEdge(edge)
+                        ? q / paths.get(ant).getCost()
+                        : 0;
+            }
+
+            edge.setPheromone(newPheromone);
+            updatePheromone(neighborNode, alreadyDone, paths);
         }
     }
 
+    /**
+     * @param paths the paths for each ant of this iteration
+     * @return the path with the lowest cost
+     */
     private List<AbstractAntNode> getBestPath(Collection<AntPath> paths) {
-        return paths.stream()
-                .min(Comparator.comparingDouble(AntPath::getCost)).orElseThrow().getNodes();
+        return paths
+                .stream()
+                .min(Comparator.comparingDouble(AntPath::getCost))
+                .orElseThrow()
+                .getNodes();
     }
 }

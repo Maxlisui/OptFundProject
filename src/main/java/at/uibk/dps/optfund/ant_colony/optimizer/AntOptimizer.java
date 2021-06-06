@@ -35,7 +35,10 @@ public class AntOptimizer implements IterativeOptimizer {
      * @param offSize The offsize, of {@link Individual} to remove
      */
     @Inject
-    public AntOptimizer(IndividualFactory individualFactory, Selector selector, Population population, AntColony antColony,
+    public AntOptimizer(IndividualFactory individualFactory,
+                        Selector selector,
+                        Population population,
+                        AntColony antColony,
                         @Constant(value = "populationSize") int populationSize,
                         @Constant(value = "offSize") int offSize) {
         this.individualFactory = individualFactory;
@@ -73,6 +76,7 @@ public class AntOptimizer implements IterativeOptimizer {
                 population.add(individualFactory.create());
             }
         } else {
+            // reduce population size
             // Remove lame elements from the population
             if (population.size() > populationSize) {
                 Collection<Individual> lames = selector.getLames(population.size() - populationSize, population);
