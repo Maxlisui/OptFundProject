@@ -28,10 +28,10 @@ public class Main {
 
             AntColonyModule ants = new AntColonyModule();
             ants.setAlpha(1);
-            ants.setBeta(5);
+            ants.setBeta(1);
             ants.setRo(0.5);
             ants.setQ(500);
-            ants.setNumberOfAnts((int)(numberOfCities * 0.8));
+            ants.setNumberOfAnts(numberOfCities * 2);
 
             AntOptimizerModule ea = new AntOptimizerModule();
             ea.setIterations(iterations);

@@ -13,3 +13,8 @@ gradlew
 gradlew.bat
 .gradle
 gradle
+/.idea/
+compiler.xml
+gradle.xml
+misc.xml
+workspace.xml

@@ -1,6 +1,7 @@
 package at.uibk.dps.optfund.ant_colony;
 
 import at.uibk.dps.optfund.ant_colony.selector.GreedySelector;
+import at.uibk.dps.optfund.ant_colony.selector.RouletteWheelSelector;
 import at.uibk.dps.optfund.ant_colony.selector.Selector;
 import org.opt4j.core.config.annotations.Info;
 import org.opt4j.core.config.annotations.Order;
@@ -73,6 +74,6 @@ public class AntColonyModule extends OptimizerModule {
     @Override
     protected void config() {
         bind(AntColony.class).to(AntColonyImpl.class);
-        bind(Selector.class).to(GreedySelector.class);
+        bind(Selector.class).to(RouletteWheelSelector.class);
     }
 }

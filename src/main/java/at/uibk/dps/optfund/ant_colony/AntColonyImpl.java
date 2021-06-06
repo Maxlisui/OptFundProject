@@ -25,6 +25,7 @@ public class AntColonyImpl implements AntColony {
     private final Object lock = new Object();
 
     private AbstractAntNode startNode = null;
+    private Set<AbstractAntEdge> edges = null;
 
     /**
      * @param edgeSelector the selector which decides which path should be taken
@@ -55,10 +56,31 @@ public class AntColonyImpl implements AntColony {
     @Override
     public void init(AbstractAntNode startNode) {
         this.startNode = startNode;
+        this.edges = collectEdges(startNode, new HashSet<>(), new HashSet<>());
+
         int numberOfCities = startNode.getNeighbours().values().size();
         for(int i = 0; i < numberOfAnts; i++) {
             ants.add(new Ant(i, startNode, numberOfCities, this.edgeSelector));
         }
+    }
+
+    /**
+     * @param node the current node to process
+     * @param alreadyDoneNodes already processed nodes
+     * @param accumulator accumulator for result
+     * @return a set of all edges for the current node and all its neighbors
+     */
+    private Set<AbstractAntEdge> collectEdges(AbstractAntNode node, Set<AbstractAntNode> alreadyDoneNodes, Set<AbstractAntEdge> accumulator) {
+
+        if(alreadyDoneNodes.contains(node)) {
+            return accumulator;
+        }
+        alreadyDoneNodes.add(node);
+
+        ImmutableMap<AbstractAntNode, AbstractAntEdge> neighbors = node.getNeighbours();
+        accumulator.addAll(node.getNeighbours().values());
+        neighbors.keySet().forEach(x -> collectEdges(x, alreadyDoneNodes, accumulator));
+        return accumulator;
     }
 
     /**
@@ -76,39 +98,27 @@ public class AntColonyImpl implements AntColony {
             }
         });
 
-        updatePheromone(startNode, new HashSet<>(), pathsPerAnt);
+
+
+        updatePheromone(pathsPerAnt);
 
         return getBestPath(pathsPerAnt.values());
     }
 
     /**
-     * @param node the current node to update
-     * @param alreadyDone a set which contains all already visited edges
      * @param paths the paths the ants traveled
      */
-    private void updatePheromone(AbstractAntNode node, Set<AbstractAntEdge> alreadyDone, Map<Ant, AntPath> paths) {
+    private void updatePheromone(Map<Ant, AntPath> paths) {
 
-        ImmutableMap<AbstractAntNode, AbstractAntEdge> neighbors = node.getNeighbours();
-        for(AbstractAntNode neighborNode : node.getNeighbours().keySet()) {
-
-            AbstractAntEdge edge = neighbors.get(neighborNode);
-
-            // check if edge has been processed
-            if(alreadyDone.contains(edge)) {
-                continue;
-            }
-            alreadyDone.add(edge);
+        for(AbstractAntEdge edge : this.edges) {
 
             double newPheromone = pheromoneFactor * edge.getPheromone();
-
             for(Ant ant : ants) {
                 newPheromone += ant.hasUsedEdge(edge)
                         ? q / paths.get(ant).getCost()
                         : 0;
             }
-
             edge.setPheromone(newPheromone);
-            updatePheromone(neighborNode, alreadyDone, paths);
         }
     }
 

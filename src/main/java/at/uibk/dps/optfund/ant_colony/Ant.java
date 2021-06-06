@@ -143,21 +143,21 @@ public class Ant {
             factors.put(poss, factor);
         }
 
-        List<Double> props = new LinkedList<>();
+        List<Double> props = new ArrayList<>(possible.size());
         for(AbstractAntEdge e : possible) {
+
+            if(sumFactorBot == 0.0) {
+                props.add(0.0);
+                continue;
+            }
+
             // Algorithm
             // p = factorTop / sumFactorBot
             // where sumFactorBot = sum(z -> z.pheromone^alpha * (1/z.distance)^beta, possible)
             // and factorTop = e.pheromone^alpha * (1/e.distance)^beta
 
-            // Calculate the factorTop
-            double factorTop = factors.get(e);
-
-            // Finally calculate the probability, if it is higher than the current best, set the best edge to the current.
-            double prop = sumFactorBot != 0 ? factorTop / sumFactorBot : 0;
-
-            // add probability to list of propabilities
-            props.add(prop);
+            // add probability to list of probabilities
+            props.add(factors.get(e) / sumFactorBot);
         }
 
         AbstractAntEdge bestEdge = this.edgeSelector.select(possible, props);
