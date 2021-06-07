@@ -97,8 +97,6 @@ public class AntColonyImpl implements AntColony {
             }
         });
 
-
-
         updatePheromone(pathsPerAnt);
 
         return pathsPerAnt.values().stream().map(AntPath::getNodes).collect(Collectors.toList());

@@ -44,6 +44,7 @@ public class RouletteWheelSelector implements Selector {
         for(int i = 0; i < intervals.length; i++) {
             if(val <= intervals[i]) {
                 chosenElement = elements.get(i);
+                break;
             }
         }
         return chosenElement;

@@ -57,7 +57,7 @@ public class Ant {
             // The ant is now on the other side of the edge
             AbstractAntEdge edge = step(currentNode, alpha, beta);
 
-            currentNode = edge.getB();
+            currentNode = getDestination(currentNode, edge);
             edges.add(edge);
             nodes.add(currentNode);
 
@@ -110,9 +110,15 @@ public class Ant {
         AbstractAntEdge edge = getNextEdge(currentNode, alpha, beta);
 
         usedEdges.add(edge);
-        currentNode = edge.getB();
+        currentNode = getDestination(currentNode, edge);
         seenNodes.add(currentNode);
         return edge;
+    }
+
+    private AbstractAntNode getDestination(AbstractAntNode current, AbstractAntEdge e) {
+        return e.getB() != current
+                ? e.getB()
+                : e.getA();
     }
 
     private AbstractAntEdge getNextEdge(AbstractAntNode currentNode, double alpha, double beta) {
@@ -126,7 +132,7 @@ public class Ant {
         }
 
         // Get all edges which can be used by the ant
-        List<AbstractAntEdge> possible = getPossibleEdges(currentNode.getNeighbours().values().asList());
+        List<AbstractAntEdge> possible = getPossibleEdges(currentNode, currentNode.getNeighbours().values().asList());
         if (possible.size() == 0) {
             throw new IllegalArgumentException("list of possible edges must not be empty");
         }
@@ -166,7 +172,7 @@ public class Ant {
         return bestEdge;
     }
 
-    private List<AbstractAntEdge> getPossibleEdges(List<AbstractAntEdge> possible) {
+    private List<AbstractAntEdge> getPossibleEdges(AbstractAntNode current, List<AbstractAntEdge> possible) {
         // The ant has not seen any node yet, just return all edges.
         if(seenNodes.isEmpty()) {
             return possible;
@@ -179,13 +185,14 @@ public class Ant {
         //noinspection ForLoopReplaceableByForEach
         for(int i = 0; i < possible.size(); i++) {
             AbstractAntEdge e = possible.get(i);
+            AbstractAntNode dest = getDestination(current, e);
 
-            if(e.getB().equals(startNode)) {
+            if(dest.equals(startNode)) {
                 continue;
             }
 
             // Ignore nodes which the ant already visited
-            if(seenNodes.contains(e.getB())) {
+            if(seenNodes.contains(dest)) {
                 continue;
             }
             edges.add(e);

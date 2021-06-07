@@ -6,8 +6,19 @@
   <component name="ChangeListManager">
     <list default="true" id="28fa8dde-8206-4387-95b9-4799b6f16325" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/selector/GreedySelector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/selector/GreedySelector.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/Ant.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/Ant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/AntColonyImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/AntColonyImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/AntConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/AntConstants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/optimizer/AntOptimizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/optimizer/AntOptimizer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/optimizer/AntOptimizerModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/optimizer/AntOptimizerModule.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/selector/RouletteWheelSelector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/selector/RouletteWheelSelector.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/tsp/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/tsp/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/tsp/SalesmanCreator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/tsp/SalesmanCreator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/tsp/SalesmanEvaluator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/tsp/SalesmanEvaluator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/tsp/SalesmanProblem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/tsp/SalesmanProblem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/tsp/model/City.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/tsp/model/City.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/tsp/model/Street.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/tsp/model/Street.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/tsp/visualization/SalesmanWidgetService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/tsp/visualization/SalesmanWidgetService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -107,6 +118,7 @@
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.0" />
+    <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="profiler.jvm" />
   </component>
   <component name="RecentsManager">
@@ -114,7 +126,11 @@
       <recent name="F:\Projects\OptFundProject\configs" />
     </key>
   </component>
+<<<<<<< HEAD
   <component name="RunManager" selected="JUnit.All Tests">
+=======
+  <component name="RunManager" selected="Application.TSP">
+>>>>>>> c6db43434e0118f3c675247619520832bfa49601
     <configuration name="DTLZ" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="at.uibk.dps.optfund.dtlz.Main" />
       <module name="OptFundProject.main" />
@@ -356,6 +372,10 @@
     </watches-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+<<<<<<< HEAD
+=======
+    <SUITE FILE_PATH="coverage/OptFundProject$TSP.ic" NAME="TSP Coverage Results" MODIFIED="1623072319811" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+>>>>>>> c6db43434e0118f3c675247619520832bfa49601
     <SUITE FILE_PATH="coverage/OptFundProject$All_Tests.ic" NAME="All Tests Coverage Results" MODIFIED="1623064785154" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="true" />
     <SUITE FILE_PATH="coverage/OptFundProject$GreedySelectorTest_greedySelector_NullWeights_ReturnsNull.ic" NAME="GreedySelectorTest.greedySelector_NullWeights_ReturnsNull Coverage Results" MODIFIED="1623064303505" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>

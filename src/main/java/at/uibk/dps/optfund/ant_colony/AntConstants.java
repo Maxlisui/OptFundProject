@@ -7,7 +7,5 @@ public class AntConstants {
     public static final String BETA_CONSTANT = "beta";
     public static final String RO_CONSTANT = "ro";
     public static final String Q_CONSTANT = "q";
-    public static final String POPULATION_SIZE_CONSTANT = "populationSize";
-    public static final String OFF_SIZE_CONSTANT = "offSize";
 
 }

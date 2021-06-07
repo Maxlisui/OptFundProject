@@ -1,6 +1,7 @@
 package at.uibk.dps.optfund.tsp.visualization;
 
 import at.uibk.dps.optfund.ant_colony.model.AbstractAntEdge;
+import at.uibk.dps.optfund.ant_colony.model.AbstractAntNode;
 import at.uibk.dps.optfund.tsp.SalesmanRoute;
 import at.uibk.dps.optfund.tsp.model.City;
 import at.uibk.dps.optfund.tsp.model.Street;
@@ -17,6 +18,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.Serial;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class SalesmanWidgetService implements IndividualMouseListener {
 
@@ -93,13 +95,28 @@ public class SalesmanWidgetService implements IndividualMouseListener {
                 g2d.drawString(Integer.toString(i), x1 + 5, y1);
             }
 
-            if(currentClickedCityIndex >= 0 && currentClickedCityIndex != salesmanRoute.size() - 1) {
+            if(currentClickedCityIndex >= 0) {
                 City clickedCity = salesmanRoute.get(currentClickedCityIndex);
-                City nextCity = salesmanRoute.get(currentClickedCityIndex + 1);
+                City nextCity = null;
+
+                if(currentClickedCityIndex == salesmanRoute.size() - 1) {
+                    nextCity = salesmanRoute.get(0);
+                } else {
+                    nextCity = salesmanRoute.get(currentClickedCityIndex + 1);
+                }
+
                 AbstractAntEdge street = clickedCity.getNeighbours().get(nextCity);
 
-                g2d.drawString("City " + currentClickedCityIndex + ": Pheromone to next Edge: " + street.getPheromone(),
+                g2d.drawString("City " + currentClickedCityIndex + ":Pheromone to next Edge: " + street.getPheromone(),
                         0, size.height - 20);
+
+                int yOffset = 10;
+                for(Map.Entry<AbstractAntNode, AbstractAntEdge> entry : clickedCity.getNeighbours().entrySet()) {
+                    int index = salesmanRoute.indexOf(entry.getKey());
+                    g2d.drawString("City " + index + ": Pheromone: " + entry.getValue().getPheromone() + " Distance: " + entry.getValue().getDistance(),
+                            0, yOffset);
+                    yOffset += 10;
+                }
             }
         }
 
