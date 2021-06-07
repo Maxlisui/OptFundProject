@@ -6,7 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="28fa8dde-8206-4387-95b9-4799b6f16325" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/tsp/visualization/SalesmanWidgetService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/tsp/visualization/SalesmanWidgetService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/Ant.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/Ant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/AntColony.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/AntColony.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/AntColonyImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/AntColonyImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/AntColonyModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/AntColonyModule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/optimizer/AntOptimizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/optimizer/AntOptimizer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/optimizer/AntOptimizerModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/optimizer/AntOptimizerModule.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -107,7 +112,7 @@
       <recent name="F:\Projects\OptFundProject\configs" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.TSP">
+  <component name="RunManager" selected="Gradle.GreedySelectorTest.greedySelector_OneHighestWeight_ChooseWithHighestWeight">
     <configuration name="DTLZ" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="at.uibk.dps.optfund.dtlz.Main" />
       <module name="OptFundProject.main" />
@@ -138,6 +143,27 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="GreedySelectorTest.greedySelector_OneHighestWeight_ChooseWithHighestWeight" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="--tests &quot;at.uibk.dps.optfund.ant_colony.selector.GreedySelectorTest.greedySelector_OneHighestWeight_ChooseWithHighestWeight&quot;" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
     <configuration name="Run" type="GradleRunConfiguration" factoryName="Gradle">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -163,7 +189,13 @@
       <item itemvalue="Application.DTLZ" />
       <item itemvalue="Application.TSP" />
       <item itemvalue="Gradle.Run" />
+      <item itemvalue="Gradle.GreedySelectorTest.greedySelector_OneHighestWeight_ChooseWithHighestWeight" />
     </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.GreedySelectorTest.greedySelector_OneHighestWeight_ChooseWithHighestWeight" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -176,7 +208,7 @@
       <workItem from="1622614701234" duration="40101000" />
       <workItem from="1622740904190" duration="13051000" />
       <workItem from="1622990339279" duration="2189000" />
-      <workItem from="1623050898441" duration="2940000" />
+      <workItem from="1623050898441" duration="8105000" />
     </task>
     <servers />
   </component>

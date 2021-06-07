@@ -17,7 +17,6 @@ public class Ant {
     private final AbstractAntNode startNode;
     private final Set<AbstractAntEdge> usedEdges = new HashSet<>();
     private final Set<AbstractAntNode> seenNodes = new HashSet<>();
-    private final Random rnd = new Random(0);
     private final Selector edgeSelector;
 
     /**
