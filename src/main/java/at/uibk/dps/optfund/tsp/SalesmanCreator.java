@@ -19,7 +19,6 @@ public class SalesmanCreator implements Creator<PermutationGenotype<City>> {
     public PermutationGenotype<City> create() {
        PermutationGenotype<City> genotype = new PermutationGenotype<>();
        genotype.addAll(problem.getCities());
-       Collections.shuffle(genotype);
        return genotype;
     }
 }

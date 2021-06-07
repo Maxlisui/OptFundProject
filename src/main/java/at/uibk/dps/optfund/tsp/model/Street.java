@@ -38,7 +38,7 @@ public class Street extends AbstractAntEdge {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Street street = (Street) o;
-        return cityA.hashCode() == street.cityA.hashCode() && cityB.hashCode() == cityB.hashCode();
+        return javasSlowFuckingHash == street.javasSlowFuckingHash;
     }
 
     @Override

@@ -14,6 +14,9 @@ public class SalesmanEvaluator implements Evaluator<SalesmanRoute> {
         for(int i = 0; i < route.size(); i++) {
             City one = route.get(i);
             City two = route.get((i + 1) % route.size());
+            if(one == two) {
+                continue;
+            }
             Street street = one.getStreet(two);
             dist += street.getDistance();
         }

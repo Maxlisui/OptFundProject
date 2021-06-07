@@ -24,19 +24,17 @@ public class Main {
         private final List<Long> iterationTimes = new ArrayList<>(iterations);
 
         public void run() {
-            int numberOfCities = 100;
+            int numberOfCities = 200;
 
             AntColonyModule ants = new AntColonyModule();
             ants.setAlpha(1);
-            ants.setBeta(1);
+            ants.setBeta(5);
             ants.setRo(0.5);
-            ants.setQ(500);
+            ants.setQ(100);
             ants.setNumberOfAnts((int)(numberOfCities * 0.8));
 
             AntOptimizerModule ea = new AntOptimizerModule();
             ea.setIterations(iterations);
-            ea.setPopulationSize(iterations);
-            ea.setOffSize(2);
 
             SalesmanModule salesman = new SalesmanModule();
             salesman.setSize(numberOfCities);

@@ -14,14 +14,12 @@ public class City extends AbstractAntNode {
     private final double y;
     private final Map<City, Street> neighbours = new HashMap<>();
     private ImmutableMap<AbstractAntNode, AbstractAntEdge> neighboursImmutable = null;
-    private int javasSlowFuckingHash = -1;
+    private final int javasSlowFuckingHash;
 
     public City(double x, double y) {
         this.x = x;
         this.y = y;
-
-        // add implicit street to self -> distance 0
-        this.addNeighbour(this);
+        javasSlowFuckingHash = Objects.hash(x, y);
     }
 
     public double getX() {
@@ -32,8 +30,8 @@ public class City extends AbstractAntNode {
         return y;
     }
 
-    public void addNeighbour(City city) {
-        neighbours.put(city, new Street(this, city));
+    public void addNeighbour(City city, Street street) {
+        neighbours.put(city, street);
     }
 
     public Street getStreet(City neighbor) {
@@ -50,9 +48,6 @@ public class City extends AbstractAntNode {
 
     @Override
     public int hashCode() {
-        if (javasSlowFuckingHash == -1) {
-            javasSlowFuckingHash = Objects.hash(x, y);
-        }
         return javasSlowFuckingHash;
     }
 
