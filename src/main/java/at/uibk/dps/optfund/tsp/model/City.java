@@ -43,7 +43,7 @@ public class City extends AbstractAntNode {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         City city = (City) o;
-        return this.javasSlowFuckingHash == city.javasSlowFuckingHash;
+        return this.x == city.x && this.y == city.y;
     }
 
     @Override

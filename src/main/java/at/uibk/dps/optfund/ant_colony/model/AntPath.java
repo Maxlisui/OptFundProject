@@ -10,7 +10,6 @@ import java.util.Collection;
  */
 public class AntPath {
 
-    private final ImmutableList<AbstractAntEdge> edges;
     private final ImmutableList<AbstractAntNode> nodes;
     private final double cost;
 
@@ -20,17 +19,8 @@ public class AntPath {
      * @param nodes The nodes taken by the ant
      */
     public AntPath(Collection<AbstractAntEdge> edges, Collection<AbstractAntNode> nodes) {
-        this.edges = ImmutableList.copyOf(edges);
         this.nodes = ImmutableList.copyOf(nodes);
-        this.cost = this.calculateCost();
-    }
-
-    /**
-     * Returns all edges taken by the ant
-     * @return An instance of an {@link ImmutableList} containing {@link AbstractAntEdge}
-     */
-    public ImmutableList<AbstractAntEdge> getEdges() {
-        return edges;
+        this.cost = this.calculateCost(edges);
     }
 
     /**
@@ -49,7 +39,7 @@ public class AntPath {
         return this.cost;
     }
 
-    private double calculateCost() {
+    private double calculateCost(Collection<AbstractAntEdge> edges) {
         return edges.stream().mapToDouble(AbstractAntEdge::getDistance).sum();
     }
 }

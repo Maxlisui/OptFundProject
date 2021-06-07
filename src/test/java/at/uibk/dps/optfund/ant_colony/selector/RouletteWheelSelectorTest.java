@@ -11,19 +11,19 @@ import java.util.List;
 public class RouletteWheelSelectorTest {
 
     @Test
-    public void rouletteWheelSelector_OneHighestWeight_RandomEdgeButNotFirst() {
+    public void rouletteWheelSelector_OneHighestWeight_FirstEdgeChosen() {
         List<AbstractAntEdge> streets = new ArrayList<>();
         List<Double> weights = new ArrayList<>();
 
-        for(int i = 0; i < 5; i++) {
+        for(int i = 0; i < 10; i++) {
             streets.add(TSPProvider.getRandomStreet());
-            weights.add((double)i);
+            weights.add((double)i / 10.0);
         }
 
         RouletteWheelSelector selector = new RouletteWheelSelector();
         AbstractAntEdge chosen = selector.select(streets, weights);
 
-        Assert.assertNotEquals(chosen, streets.get(0));
+        Assert.assertEquals(chosen, streets.get(0));
     }
 
     @Test
