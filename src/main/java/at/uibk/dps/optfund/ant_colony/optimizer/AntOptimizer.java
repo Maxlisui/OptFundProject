@@ -83,10 +83,16 @@ public class AntOptimizer implements IterativeOptimizer {
                 population.removeAll(lames);
             }
 
-            // Let the ant colony create a new genotype and add it to the population
-            PermutationGenotype<AbstractAntNode> genotype = new PermutationGenotype<>(antColony.next());
-            Individual child = individualFactory.create(genotype);
-            population.add(child);
+            // Let the ant colony create a new genotype for each ant
+            Collection<Collection<AbstractAntNode>> antNodes = antColony.next();
+
+            // Create a new genotype for each path and add it to the population
+            for(Collection<AbstractAntNode> path : antNodes) {
+                PermutationGenotype<AbstractAntNode> genotype = new PermutationGenotype<>(path);
+                Individual child = individualFactory.create(genotype);
+                population.add(child);
+            }
+
         }
     }
 }

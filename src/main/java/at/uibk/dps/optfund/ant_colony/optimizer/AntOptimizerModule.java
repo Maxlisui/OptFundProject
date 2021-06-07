@@ -1,5 +1,6 @@
 package at.uibk.dps.optfund.ant_colony.optimizer;
 
+import at.uibk.dps.optfund.ant_colony.AntConstants;
 import org.opt4j.core.config.annotations.Info;
 import org.opt4j.core.config.annotations.Order;
 import org.opt4j.core.optimizer.MaxIterations;
@@ -12,9 +13,9 @@ import org.opt4j.core.start.Constant;
  */
 public class AntOptimizerModule extends OptimizerModule {
 
-    @Constant(value = "populationSize")
+    @Constant(value = AntConstants.POPULATION_SIZE_CONSTANT)
     protected int populationSize = 100;
-    @Constant(value = "offSize")
+    @Constant(value = AntConstants.OFF_SIZE_CONSTANT)
     protected int offSize = 25;
 
     @Info("The number of iterations.")

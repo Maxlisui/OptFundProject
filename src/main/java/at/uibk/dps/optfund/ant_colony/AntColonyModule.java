@@ -1,6 +1,5 @@
 package at.uibk.dps.optfund.ant_colony;
 
-import at.uibk.dps.optfund.ant_colony.selector.GreedySelector;
 import at.uibk.dps.optfund.ant_colony.selector.RouletteWheelSelector;
 import at.uibk.dps.optfund.ant_colony.selector.Selector;
 import org.opt4j.core.config.annotations.Info;
@@ -12,27 +11,27 @@ public class AntColonyModule extends OptimizerModule {
 
     @Info("The number of ants.")
     @Order(0)
-    @Constant(value = "numberOfAnts", namespace = AntColonyImpl.class)
+    @Constant(value = AntConstants.NUMBER_OF_ANTS_CONSTANT, namespace = AntColonyImpl.class)
     protected int numberOfAnts = 1000;
 
     @Info("The alpha value (weight of pheromones).")
     @Order(1)
-    @Constant(value = "alpha", namespace = AntColonyImpl.class)
+    @Constant(value = AntConstants.ALPHA_CONSTANT, namespace = AntColonyImpl.class)
     protected double alpha = 1.0;
 
     @Info("The beta value (weight of paths).")
     @Order(2)
-    @Constant(value = "beta", namespace = AntColonyImpl.class)
+    @Constant(value = AntConstants.BETA_CONSTANT, namespace = AntColonyImpl.class)
     protected double beta = 1.0;
 
     @Info("The pheromone decay rate.")
     @Order(3)
-    @Constant(value = "ro", namespace = AntColonyImpl.class)
+    @Constant(value = AntConstants.RO_CONSTANT, namespace = AntColonyImpl.class)
     protected double ro = 0.5;
 
     @Info("The pheromone value.")
     @Order(4)
-    @Constant(value = "q", namespace = AntColonyImpl.class)
+    @Constant(value = AntConstants.Q_CONSTANT, namespace = AntColonyImpl.class)
     protected double q = 500;
 
     public int getNumberOfAnts() { return numberOfAnts; }
