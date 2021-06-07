@@ -1,9 +1,10 @@
 package at.uibk.dps.optfund.dtlz.optimizer;
 
-import at.uibk.dps.optfund.dtlz.utils.FireflyParticleMover;
-import at.uibk.dps.optfund.dtlz.utils.FitnessCalculator;
-import at.uibk.dps.optfund.dtlz.utils.InverseProportionalFitnessCalculator;
-import at.uibk.dps.optfund.dtlz.utils.ParticleMover;
+import at.uibk.dps.optfund.dtlz.factory.FireflyFactory;
+import at.uibk.dps.optfund.dtlz.factory.FireflyFactoryImpl;
+import at.uibk.dps.optfund.dtlz.utils.*;
+import com.google.inject.TypeLiteral;
+import org.opt4j.core.Individual;
 import org.opt4j.core.config.annotations.Info;
 import org.opt4j.core.optimizer.MaxIterations;
 import org.opt4j.core.optimizer.OptimizerModule;
@@ -11,7 +12,6 @@ import org.opt4j.core.start.Constant;
 
 /**
  * Module for firefly optimization
- *
  * @author Daniel Eberharter
  */
 public class FireflyAlgorithmModule extends OptimizerModule {
@@ -100,8 +100,10 @@ public class FireflyAlgorithmModule extends OptimizerModule {
      */
     @Override
     protected void config() {
-        bind(FitnessCalculator.class).to(InverseProportionalFitnessCalculator.class);
-        bind(ParticleMover.class).to(FireflyParticleMover.class);
+        bind(FireflySelector.class).to(FireflySelectorImpl.class);
+        bind(FitnessCalculator.class).to(FitnessCalculatorImpl.class);
+        bind(FireflyFactory.class).to(FireflyFactoryImpl.class);
+        bind(ParticleMover.class).to(ParticleMoverImpl.class);
         bindIterativeOptimizer(FireflyAlgorithm.class);
     }
 }

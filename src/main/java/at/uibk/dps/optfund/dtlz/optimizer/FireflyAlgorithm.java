@@ -1,5 +1,8 @@
 package at.uibk.dps.optfund.dtlz.optimizer;
 
+import at.uibk.dps.optfund.dtlz.factory.FireflyFactory;
+import at.uibk.dps.optfund.dtlz.model.Firefly;
+import at.uibk.dps.optfund.dtlz.utils.FireflySelector;
 import at.uibk.dps.optfund.dtlz.utils.FitnessCalculator;
 import at.uibk.dps.optfund.dtlz.utils.ParticleMover;
 import com.google.inject.Inject;
@@ -25,23 +28,26 @@ public class FireflyAlgorithm implements IterativeOptimizer {
     protected final IndividualFactory individualFactory;
     protected final Population population;
     protected final Selector selector;
-    private final FitnessCalculator fitnessCalculator;
     private final ParticleMover particleMover;
+    private final FireflyFactory factory;
+    private final FireflySelector fireflySelector;
     protected final int numberOfFireflies;
 
     @Inject
     public FireflyAlgorithm(IndividualFactory individualFactory,
                             Population population,
                             Selector selector,
-                            FitnessCalculator fitnessCalculator,
                             ParticleMover particleMover,
+                            FireflyFactory factory,
+                            FireflySelector fireflySelector,
                             @Constant(value = "numberOfFireflies", namespace = FireflyAlgorithmModule.class) int numberOfFireflies) {
 
         this.individualFactory = individualFactory;
         this.population = population;
         this.selector = selector;
-        this.fitnessCalculator = fitnessCalculator;
         this.particleMover = particleMover;
+        this.factory = factory;
+        this.fireflySelector = fireflySelector;
         this.numberOfFireflies = numberOfFireflies;
     }
 
@@ -68,15 +74,17 @@ public class FireflyAlgorithm implements IterativeOptimizer {
             }
         } else {
 
+            final List<Firefly> fireflies = factory.createFireflies(population);
+
             // pick the best individual -> firefly with highest brightness
-            final Individual bestIndividual = fitnessCalculator.getFittestIndividual(population);
+            final Firefly bestIndividual = fireflySelector.getFittestFirefly(fireflies);
 
             // move all fireflies towards the firefly with the highest brightness
-            List<Individual> newPopulation = population.parallelStream().map(i -> {
+            List<Individual> newPopulation = fireflies.parallelStream().map(i -> {
 
                 // bestIndividual does not move
                 if(i == bestIndividual) {
-                    return bestIndividual;
+                    return this.individualFactory.create(bestIndividual.getPosition());
                 }
 
                 // move and create individual from new position

@@ -1,10 +1,9 @@
 package at.uibk.dps.optfund.dtlz.utils;
 
-import at.uibk.dps.optfund.dtlz.optimizer.FireflyAlgorithm;
+import at.uibk.dps.optfund.dtlz.model.Firefly;
 import at.uibk.dps.optfund.dtlz.optimizer.FireflyAlgorithmModule;
 import com.google.inject.Inject;
 import org.opt4j.benchmarks.DoubleString;
-import org.opt4j.core.Individual;
 import org.opt4j.core.start.Constant;
 
 import java.util.Random;
@@ -13,17 +12,24 @@ import java.util.Random;
  * Service for moving particles
  * @author Daniel Eberharter
  */
-public class FireflyParticleMover implements ParticleMover {
+public class ParticleMoverImpl implements ParticleMover {
 
     protected final Random rnd = new Random(0);
     private final double randomWalkCoefficient;
     private final double attractivenessCoefficient;
     private final double lightAbsorptionCoefficient;
 
+    /**
+     * Constructor
+     * @param randomWalkCoefficient coefficient for random movement
+     * @param attractivenessCoefficient coefficient for attractiveness between fireflies
+     * @param lightAbsorptionCoefficient coefficient for light absorbtion due to distance
+     * @author Daniel Eberharter
+     */
     @Inject
-    public FireflyParticleMover(@Constant(value = "randomWalkCoefficient", namespace = FireflyAlgorithmModule.class) double randomWalkCoefficient,
-                                @Constant(value = "attractivenessCoefficient", namespace = FireflyAlgorithmModule.class) double attractivenessCoefficient,
-                                @Constant(value = "lightAbsorptionCoefficient", namespace = FireflyAlgorithmModule.class) double lightAbsorptionCoefficient) {
+    public ParticleMoverImpl(@Constant(value = "randomWalkCoefficient", namespace = FireflyAlgorithmModule.class) double randomWalkCoefficient,
+                             @Constant(value = "attractivenessCoefficient", namespace = FireflyAlgorithmModule.class) double attractivenessCoefficient,
+                             @Constant(value = "lightAbsorptionCoefficient", namespace = FireflyAlgorithmModule.class) double lightAbsorptionCoefficient) {
         this.randomWalkCoefficient = randomWalkCoefficient;
         this.attractivenessCoefficient = attractivenessCoefficient;
         this.lightAbsorptionCoefficient = lightAbsorptionCoefficient;
@@ -31,23 +37,19 @@ public class FireflyParticleMover implements ParticleMover {
 
     /**
      * Mutation method for position of particle
-     * @param particle the particle to move
+     * @param firefly the particle to move
      * @param reference the reference particle (does not move)
      * @return the new position for particle
      * @author Daniel Eberharter
      */
     @Override
-    public DoubleString move(Individual particle, Individual reference) {
-        DoubleString positionF1 = ((DoubleString)particle.getGenotype());
-        DoubleString positionF2 = ((DoubleString)reference.getGenotype());
-
-        final double distance = calculateDistance(positionF1, positionF2);
-        for(int d = 0; d < positionF1.size(); d++) {
-            positionF1.set(d, calculateNewPosition(positionF1.get(d), positionF2.get(d), distance));
+    public DoubleString move(Firefly firefly, Firefly reference) {
+        final double distance = calculateDistance(firefly.getPosition(), reference.getPosition());
+        for(int d = 0; d < firefly.getPosition().size(); d++) {
+            firefly.getPosition().set(d, calculateNewPosition(firefly.getPosition().get(d), reference.getPosition().get(d), distance));
         }
-        return positionF1;
+        return firefly.getPosition();
     }
-
 
     /**
      * Calculate the distance between two fireflies

@@ -1,5 +1,6 @@
 package at.uibk.dps.optfund.dtlz.utils;
 
+import at.uibk.dps.optfund.dtlz.model.Firefly;
 import org.opt4j.benchmarks.DoubleString;
 import org.opt4j.core.Individual;
 
@@ -11,10 +12,10 @@ public interface ParticleMover {
 
     /**
      * Mutation method for position of particle
-     * @param particle the particle to move
+     * @param firefly the particle to move
      * @param reference the reference particle (does not move)
      * @return the new position for particle
      * @author Daniel Eberharter
      */
-    DoubleString move(Individual particle, Individual reference);
+    DoubleString move(Firefly firefly, Firefly reference);
 }
