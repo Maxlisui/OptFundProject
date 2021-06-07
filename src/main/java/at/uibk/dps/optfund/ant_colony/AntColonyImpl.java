@@ -9,6 +9,7 @@ import com.google.inject.Inject;
 import org.opt4j.core.start.Constant;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * An implementation for an ant colony
@@ -24,7 +25,6 @@ public class AntColonyImpl implements AntColony {
     private final ArrayList<Ant> ants = new ArrayList<>();
     private final Object lock = new Object();
 
-    private AbstractAntNode startNode = null;
     private Set<AbstractAntEdge> edges = null;
 
     /**
@@ -37,11 +37,11 @@ public class AntColonyImpl implements AntColony {
      */
     @Inject
     public AntColonyImpl(Selector edgeSelector,
-                         @Constant(value = "numberOfAnts", namespace = AntColonyImpl.class) int numberOfAnts,
-                         @Constant(value = "alpha", namespace = AntColonyImpl.class) double alpha,
-                         @Constant(value = "beta", namespace = AntColonyImpl.class) double beta,
-                         @Constant(value = "ro", namespace = AntColonyImpl.class) double ro,
-                         @Constant(value = "q", namespace = AntColonyImpl.class) double q) {
+                         @Constant(value = AntConstants.NUMBER_OF_ANTS_CONSTANT, namespace = AntColonyImpl.class) int numberOfAnts,
+                         @Constant(value = AntConstants.ALPHA_CONSTANT, namespace = AntColonyImpl.class) double alpha,
+                         @Constant(value = AntConstants.BETA_CONSTANT, namespace = AntColonyImpl.class) double beta,
+                         @Constant(value = AntConstants.RO_CONSTANT, namespace = AntColonyImpl.class) double ro,
+                         @Constant(value = AntConstants.Q_CONSTANT, namespace = AntColonyImpl.class) double q) {
         this.edgeSelector = edgeSelector;
         this.numberOfAnts = numberOfAnts;
         this.alpha = alpha;
@@ -55,7 +55,6 @@ public class AntColonyImpl implements AntColony {
      */
     @Override
     public void init(AbstractAntNode startNode) {
-        this.startNode = startNode;
         this.edges = collectEdges(startNode, new HashSet<>(), new HashSet<>());
 
         int numberOfCities = startNode.getNeighbours().values().size();
@@ -87,7 +86,7 @@ public class AntColonyImpl implements AntColony {
      * @return the best path of this iteration
      */
     @Override
-    public Collection<AbstractAntNode> next() {
+    public Collection<Collection<AbstractAntNode>> next() {
         Map<Ant, AntPath> pathsPerAnt = new HashMap<>();
 
         ants.parallelStream().forEach(x -> {
@@ -102,7 +101,7 @@ public class AntColonyImpl implements AntColony {
 
         updatePheromone(pathsPerAnt);
 
-        return getBestPath(pathsPerAnt.values());
+        return pathsPerAnt.values().stream().map(AntPath::getNodes).collect(Collectors.toList());
     }
 
     /**
@@ -118,17 +117,5 @@ public class AntColonyImpl implements AntColony {
             }
             x.setPheromone(newPheromone);
         });
-    }
-
-    /**
-     * @param paths the paths for each ant of this iteration
-     * @return the path with the lowest cost
-     */
-    private List<AbstractAntNode> getBestPath(Collection<AntPath> paths) {
-        return paths
-                .stream()
-                .min(Comparator.comparingDouble(AntPath::getCost))
-                .orElseThrow()
-                .getNodes();
     }
 }

@@ -16,10 +16,10 @@ public interface AntColony {
     void init(AbstractAntNode startNode);
 
     /**
-     * Next function returns a collection of nodes which the ant will take
-     * @return A collection of {@link AbstractAntNode}
+     * Next function returns a collection of nodes which each ant takes
+     * @return A collection of a collection of {@link AbstractAntNode}
      */
-    Collection<AbstractAntNode> next();
+    Collection<Collection<AbstractAntNode>> next();
 
 
 }
