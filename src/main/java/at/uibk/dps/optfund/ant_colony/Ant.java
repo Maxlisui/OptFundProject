@@ -53,8 +53,8 @@ public class Ant {
         // As long as the ant is not on the start node we let the ant move through the graph.
         // Further implementation will check to not hit a node multiple times
         do {
-            // Get the next edge and add it to the result
-            // The ant is now on the other side of the edge
+            // Get the next edge and get the destination
+            // Set the destination as current node and add it to the result
             AbstractAntEdge edge = step(currentNode, alpha, beta);
 
             currentNode = getDestination(currentNode, edge);
