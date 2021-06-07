@@ -16,6 +16,18 @@ public class GreedySelector implements Selector {
      */
     @Override
     public AbstractAntEdge select(List<AbstractAntEdge> elements, List<Double> weights) {
+        if(elements == null || elements.size() == 0) {
+            return null;
+        }
+
+        if(weights == null || weights.size() == 0) {
+            return null;
+        }
+
+        if(weights.size() != elements.size()) {
+            throw new IllegalArgumentException("count of weights does not match count of elements");
+        }
+
         double maxWeight = Double.MIN_VALUE;
         AbstractAntEdge element = null;
 

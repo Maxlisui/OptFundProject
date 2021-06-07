@@ -19,7 +19,11 @@ public class RouletteWheelSelector implements Selector {
             return null;
         }
 
-        if(weights == null || weights.size() != elements.size()) {
+        if(weights == null || weights.size() == 0) {
+            return null;
+        }
+
+        if(weights.size() != elements.size()) {
             throw new IllegalArgumentException("count of weights does not match count of elements");
         }
 

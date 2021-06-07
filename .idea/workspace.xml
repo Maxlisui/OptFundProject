@@ -6,12 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="28fa8dde-8206-4387-95b9-4799b6f16325" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/Ant.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/Ant.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/AntColony.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/AntColony.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/AntColonyImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/AntColonyImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/AntColonyModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/AntColonyModule.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/optimizer/AntOptimizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/optimizer/AntOptimizer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/optimizer/AntOptimizerModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/optimizer/AntOptimizerModule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/selector/GreedySelector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/selector/GreedySelector.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/selector/RouletteWheelSelector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/uibk/dps/optfund/ant_colony/selector/RouletteWheelSelector.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,6 +36,12 @@
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="OptFundProject" type="f1a62948:ProjectNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="OptFundProject" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="verification" type="c8890929:TasksNode$1" />
               </path>
             </expand>
             <select />
@@ -112,7 +114,7 @@
       <recent name="F:\Projects\OptFundProject\configs" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.GreedySelectorTest.greedySelector_OneHighestWeight_ChooseWithHighestWeight">
+  <component name="RunManager" selected="JUnit.All Tests">
     <configuration name="DTLZ" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="at.uibk.dps.optfund.dtlz.Main" />
       <module name="OptFundProject.main" />
@@ -143,12 +145,97 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="GreedySelectorTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="--tests &quot;at.uibk.dps.optfund.ant_colony.selector.GreedySelectorTest&quot;" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="GreedySelectorTest.greedySelector_NullWeights_ReturnsNull" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="--tests &quot;at.uibk.dps.optfund.ant_colony.selector.GreedySelectorTest.greedySelector_NullWeights_ReturnsNull&quot;" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
     <configuration name="GreedySelectorTest.greedySelector_OneHighestWeight_ChooseWithHighestWeight" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="externalSystemIdString" value="GRADLE" />
         <option name="scriptParameters" value="--tests &quot;at.uibk.dps.optfund.ant_colony.selector.GreedySelectorTest.greedySelector_OneHighestWeight_ChooseWithHighestWeight&quot;" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="OptFundProject [jacocoTestReport]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="jacocoTestReport" />
+          </list>
+        </option>
+        <option name="vmOptions" value="" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <extension name="coverage" runner="jacoco" />
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="RouletteWheelSelectorTest.rouletteWheelSelector_OneHighestWeight_ChooseWithHighestWeight" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="--tests &quot;at.uibk.dps.optfund.ant_colony.selector.RouletteWheelSelectorTest.rouletteWheelSelector_OneHighestWeight_ChooseWithHighestWeight&quot;" />
         <option name="taskDescriptions">
           <list />
         </option>
@@ -185,14 +272,34 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
+    <configuration name="All Tests" type="JUnit" factoryName="JUnit">
+      <module name="OptFundProject.test" />
+      <extension name="coverage" sample_coverage="false" track_test_folders="true" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <list>
       <item itemvalue="Application.DTLZ" />
       <item itemvalue="Application.TSP" />
       <item itemvalue="Gradle.Run" />
       <item itemvalue="Gradle.GreedySelectorTest.greedySelector_OneHighestWeight_ChooseWithHighestWeight" />
+      <item itemvalue="Gradle.GreedySelectorTest" />
+      <item itemvalue="Gradle.OptFundProject [jacocoTestReport]" />
+      <item itemvalue="JUnit.All Tests" />
+      <item itemvalue="Gradle.GreedySelectorTest.greedySelector_NullWeights_ReturnsNull" />
+      <item itemvalue="Gradle.RouletteWheelSelectorTest.rouletteWheelSelector_OneHighestWeight_ChooseWithHighestWeight" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.RouletteWheelSelectorTest.rouletteWheelSelector_OneHighestWeight_ChooseWithHighestWeight" />
+        <item itemvalue="Gradle.GreedySelectorTest.greedySelector_NullWeights_ReturnsNull" />
+        <item itemvalue="Gradle.OptFundProject [jacocoTestReport]" />
+        <item itemvalue="Gradle.GreedySelectorTest" />
         <item itemvalue="Gradle.GreedySelectorTest.greedySelector_OneHighestWeight_ChooseWithHighestWeight" />
       </list>
     </recent_temporary>
@@ -228,6 +335,15 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/at/uibk/dps/optfund/ant_colony/selector/GreedySelectorTest.java</url>
+          <line>48</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="org.opt4j.core.Individual" memberName="objectives" />
@@ -238,5 +354,9 @@
         <watch expression="archive" />
       </configuration>
     </watches-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/OptFundProject$All_Tests.ic" NAME="All Tests Coverage Results" MODIFIED="1623064785154" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="true" />
+    <SUITE FILE_PATH="coverage/OptFundProject$GreedySelectorTest_greedySelector_NullWeights_ReturnsNull.ic" NAME="GreedySelectorTest.greedySelector_NullWeights_ReturnsNull Coverage Results" MODIFIED="1623064303505" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>
