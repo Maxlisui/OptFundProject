@@ -1,0 +1,23 @@
+<configuration>
+  <module class="org.opt4j.benchmarks.dtlz.DTLZModule">
+    <property name="function">DTLZ1</property>
+    <property name="alpha">100.0</property>
+    <property name="m">1</property>
+    <property name="n">1000</property>
+    <property name="k">1000</property>
+    <property name="encoding">DOUBLE</property>
+    <property name="bits">30</property>
+  </module>
+  <module class="at.uibk.dps.optfund.dtlz.optimizer.FireflyAlgorithmModule">
+    <property name="iterations">1000</property>
+    <property name="attractivenessCoefficient">1.0</property>
+    <property name="lightAbsorptionCoefficient">0.05</property>
+    <property name="randomWalkCoefficient">0.01</property>
+    <property name="numberOfFireflies">100</property>
+  </module>
+  <module class="org.opt4j.viewer.ViewerModule">
+    <property name="closeEvent">STOP</property>
+    <property name="closeOnStop">false</property>
+    <property name="title">Opt4J -SNAPSHOT Viewer</property>
+  </module>
+</configuration>
