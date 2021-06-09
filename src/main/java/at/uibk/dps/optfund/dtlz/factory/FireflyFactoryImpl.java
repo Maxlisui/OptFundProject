@@ -36,6 +36,9 @@ public class FireflyFactoryImpl implements FireflyFactory {
      */
     @Override
     public Firefly createFirefly(DoubleString position, double[] objectives) {
+        if(position == null) {
+            throw new IllegalArgumentException("position");
+        }
         return new Firefly(position, fitnessCalculator.calculateFitness(objectives));
     }
 
@@ -46,7 +49,11 @@ public class FireflyFactoryImpl implements FireflyFactory {
      */
     @Override
     public Firefly createFirefly(Individual individual) {
-        return createFirefly((DoubleString) individual.getGenotype(), individual.getObjectives().array());
+        double[] objectives = new double[0];
+        if(individual.isEvaluated()) {
+            objectives = individual.getObjectives().array();
+        }
+        return createFirefly((DoubleString) individual.getGenotype(), objectives);
     }
 
     /**

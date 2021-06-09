@@ -11,7 +11,7 @@ public class Main {
 
     public static void main(String[] args) {
         FireflyAlgorithmModule ea = new FireflyAlgorithmModule();
-        ea.setIterations(10000);
+        ea.setIterations(1000);
         ea.setAttractivenessCoefficient(1.0);
         ea.setLightAbsorptionCoefficient(0.05);
         ea.setRandomWalkCoefficient(0.01);

@@ -44,6 +44,13 @@ public class ParticleMoverImpl implements ParticleMover {
      */
     @Override
     public DoubleString move(Firefly firefly, Firefly reference) {
+        if(firefly == null) {
+            throw new IllegalArgumentException("firefly");
+        }
+        if(reference == null) {
+            throw new IllegalArgumentException("reference");
+        }
+
         final double distance = calculateDistance(firefly.getPosition(), reference.getPosition());
         for(int d = 0; d < firefly.getPosition().size(); d++) {
             firefly.getPosition().set(d, calculateNewPosition(firefly.getPosition().get(d), reference.getPosition().get(d), distance));

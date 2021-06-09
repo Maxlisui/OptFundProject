@@ -16,7 +16,10 @@ public class FitnessCalculatorImpl implements FitnessCalculator {
      */
     @Override
     public double calculateFitness(double[] objectives) {
-        if(objectives == null || objectives.length == 0) {
+        if(objectives == null) {
+            throw new IllegalArgumentException("objectives");
+        }
+        if(objectives.length == 0) {
             return 0.0;
         }
         return 1 / Arrays.stream(objectives).sum();
