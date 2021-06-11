@@ -1,7 +1,7 @@
 package at.uibk.dps.optfund.ant_colony;
 
 import at.uibk.dps.optfund.ant_colony.model.*;
-import at.uibk.dps.optfund.ant_colony.selector.Selector;
+import at.uibk.dps.optfund.ant_colony.stepper.AntStepper;
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 import org.opt4j.core.start.Constant;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  */
 public class AntColonyImpl<T> implements AntColony<T> {
 
-    private final Selector edgeSelector;
+    private final AntStepper stepper;
     private final int numberOfAnts;
     private final double alpha;
     private final double beta;
@@ -28,7 +28,7 @@ public class AntColonyImpl<T> implements AntColony<T> {
     private Set<AntEdge<T>> edges = null;
 
     /**
-     * @param edgeSelector the selector which decides which path should be taken
+     * @param stepper The stepping interface of ant which selects the next node
      * @param numberOfAnts the number of ants
      * @param alpha the pheromone weight
      * @param beta the path length weight
@@ -36,13 +36,13 @@ public class AntColonyImpl<T> implements AntColony<T> {
      * @param q the pheromone level constant
      */
     @Inject
-    public AntColonyImpl(Selector edgeSelector,
+    public AntColonyImpl(AntStepper stepper,
                          @Constant(value = AntConstants.NUMBER_OF_ANTS_CONSTANT, namespace = AntColonyImpl.class) int numberOfAnts,
                          @Constant(value = AntConstants.ALPHA_CONSTANT, namespace = AntColonyImpl.class) double alpha,
                          @Constant(value = AntConstants.BETA_CONSTANT, namespace = AntColonyImpl.class) double beta,
                          @Constant(value = AntConstants.RO_CONSTANT, namespace = AntColonyImpl.class) double ro,
                          @Constant(value = AntConstants.Q_CONSTANT, namespace = AntColonyImpl.class) double q) {
-        this.edgeSelector = edgeSelector;
+        this.stepper = stepper;
         this.numberOfAnts = numberOfAnts;
         this.alpha = alpha;
         this.beta = beta;
@@ -59,7 +59,7 @@ public class AntColonyImpl<T> implements AntColony<T> {
 
         int numberOfCities = startNode.getNeighbours().values().size();
         for(int i = 0; i < numberOfAnts; i++) {
-            ants.add(new Ant<>(i, startNode, numberOfCities, this.edgeSelector));
+            ants.add(new Ant<>(i, startNode, numberOfCities, stepper));
         }
     }
 

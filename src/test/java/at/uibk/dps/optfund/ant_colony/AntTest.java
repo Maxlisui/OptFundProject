@@ -2,7 +2,6 @@ package at.uibk.dps.optfund.ant_colony;
 
 import at.uibk.dps.optfund.ant_colony.model.AntNode;
 import at.uibk.dps.optfund.ant_colony.model.AntPath;
-import at.uibk.dps.optfund.ant_colony.selector.GreedySelector;
 import at.uibk.dps.optfund.test_helper.AntProvider;
 import at.uibk.dps.optfund.test_helper.TSPProvider;
 import org.junit.Assert;
@@ -18,7 +17,7 @@ public class AntTest {
     public void ant_GetPath_ReturnsValidPath() {
         int numberOfNodes = 4;
 
-        Ant<SalesmanProblem.City> a = new Ant<>(0, TSPProvider.setupExampleGraph().get(0), numberOfNodes, new GreedySelector());
+        Ant<SalesmanProblem.City> a = new Ant<>(0, TSPProvider.setupExampleGraph().get(0), numberOfNodes, AntProvider.createAntStepper());
 
         AntPath<SalesmanProblem.City> path = a.getPath(AntProvider.ALPHA, AntProvider.BETA);
 
@@ -32,7 +31,7 @@ public class AntTest {
         AntNode<SalesmanProblem.City> startNode = nodes.get(0);
         AntNode<SalesmanProblem.City> b = nodes.get(1);
 
-        Ant<SalesmanProblem.City> a = new Ant<>(0, startNode, numberOfNodes, new GreedySelector());
+        Ant<SalesmanProblem.City> a = new Ant<>(0, startNode, numberOfNodes, AntProvider.createAntStepper());
 
         a.getPath(AntProvider.ALPHA, AntProvider.BETA);
 
@@ -48,7 +47,7 @@ public class AntTest {
         AntNode<SalesmanProblem.City> c = nodes.get(2);
         AntNode<SalesmanProblem.City> d = nodes.get(3);
 
-        Ant<SalesmanProblem.City> a = new Ant<>(0, startNode, numberOfNodes, new GreedySelector());
+        Ant<SalesmanProblem.City> a = new Ant<>(0, startNode, numberOfNodes, AntProvider.createAntStepper());
 
         a.getPath(AntProvider.ALPHA, AntProvider.BETA);
 
@@ -65,7 +64,7 @@ public class AntTest {
     public void ant_GetPathNoPathAvailable_ExceptionThrown() {
         int numberOfNodes = 2;
         SalesmanProblem problem = new SalesmanProblem(0);
-        Ant<SalesmanProblem.City> a = new Ant<>(0, new AntNode<>(problem.new City(0.0, 0.0), 0.0, 0.0), numberOfNodes, new GreedySelector());
+        Ant<SalesmanProblem.City> a = new Ant<>(0, new AntNode<>(problem.new City(0.0, 0.0), 0.0, 0.0), numberOfNodes, AntProvider.createAntStepper());
 
         Assert.assertThrows(IllegalArgumentException.class, () -> a.getPath(AntProvider.ALPHA, AntProvider.BETA));
     }

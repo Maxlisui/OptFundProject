@@ -61,6 +61,17 @@ public class AntNode<T> {
     }
 
     /**
+     * Returns the destination node of the given edge
+     * @param edge The edge
+     * @return The destination node
+     */
+    public AntNode<T> getDesination(AntEdge<T> edge) {
+        return edge.getNodeB() != this
+                ? edge.getNodeB()
+                : edge.getNodeA();
+    }
+
+    /**
      * Returns all neighbours of this node and the respective edge
      * @return All neighbours of this node and the respective edge
      */

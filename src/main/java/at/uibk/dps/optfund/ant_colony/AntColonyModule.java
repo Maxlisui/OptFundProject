@@ -1,7 +1,11 @@
 package at.uibk.dps.optfund.ant_colony;
 
+import at.uibk.dps.optfund.ant_colony.filter.EdgeFilter;
+import at.uibk.dps.optfund.ant_colony.filter.EdgeFilterImpl;
 import at.uibk.dps.optfund.ant_colony.selector.RouletteWheelSelector;
 import at.uibk.dps.optfund.ant_colony.selector.Selector;
+import at.uibk.dps.optfund.ant_colony.stepper.AntStepper;
+import at.uibk.dps.optfund.ant_colony.stepper.AntStepperImpl;
 import com.google.inject.TypeLiteral;
 import org.opt4j.core.config.annotations.Info;
 import org.opt4j.core.config.annotations.Order;
@@ -74,7 +78,9 @@ public class AntColonyModule extends OptimizerModule {
 
     @Override
     protected void config() {
-        bind(new TypeLiteral<AntColony<SalesmanProblem.City>>(){}).to(new TypeLiteral<AntColonyImpl<SalesmanProblem.City>>() {});
         bind(Selector.class).to(RouletteWheelSelector.class);
+        bind(EdgeFilter.class).to(EdgeFilterImpl.class);
+        bind(AntStepper.class).to(AntStepperImpl.class);
+        bind(new TypeLiteral<AntColony<SalesmanProblem.City>>(){}).to(new TypeLiteral<AntColonyImpl<SalesmanProblem.City>>() {});
     }
 }

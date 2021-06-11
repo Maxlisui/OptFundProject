@@ -1,7 +1,7 @@
 package at.uibk.dps.optfund.ant_colony;
 
 import at.uibk.dps.optfund.ant_colony.model.*;
-import at.uibk.dps.optfund.ant_colony.selector.Selector;
+import at.uibk.dps.optfund.ant_colony.stepper.AntStepper;
 
 import java.util.*;
 
@@ -17,20 +17,20 @@ public class Ant<T> {
     private final AntNode<T> startNode;
     private final Set<AntEdge<T>> usedEdges = new HashSet<>();
     private final Set<AntNode<T>> seenNodes = new HashSet<>();
-    private final Selector edgeSelector;
+    private final AntStepper stepper;
 
     /**
      * Creates a new instance of an ant
      * @param antIndex An ant index, which is used for comparing ants
      * @param startNode The ants start node
      * @param numberOfNodes The number of total nodes
-     * @param edgeSelector the selection algorithm for picking an edge
+     * @param stepper The stepping interface of ant which selects the next node
      */
-    public Ant(int antIndex, AntNode<T> startNode, int numberOfNodes, Selector edgeSelector) {
+    public Ant(int antIndex, AntNode<T> startNode, int numberOfNodes, AntStepper stepper) {
         this.antIndex = antIndex;
         this.startNode = startNode;
         this.numberOfNodes = numberOfNodes;
-        this.edgeSelector = edgeSelector;
+        this.stepper = stepper;
     }
 
     /**
@@ -57,7 +57,7 @@ public class Ant<T> {
             // Set the destination as current node and add it to the result
             AntEdge<T> edge = step(currentNode, alpha, beta);
 
-            currentNode = getDestination(currentNode, edge);
+            currentNode = currentNode.getDesination(edge);
             edges.add(edge);
             nodes.add(currentNode);
 
@@ -108,104 +108,11 @@ public class Ant<T> {
     private AntEdge<T> step(AntNode<T> currentNode, double alpha, double beta) {
         // First get the next node, based on the ACO algorithm
         // And add it to the other side to the seen nodes and the used edges
-        AntEdge<T> edge = getNextEdge(currentNode, alpha, beta);
+        AntEdge<T> edge = stepper.getNextEdge(currentNode, startNode, seenNodes, alpha, beta, numberOfNodes);
 
         usedEdges.add(edge);
-        currentNode = getDestination(currentNode, edge);
+        currentNode = currentNode.getDesination(edge);
         seenNodes.add(currentNode);
         return edge;
     }
-
-    private AntNode<T> getDestination(AntNode<T> current, AntEdge<T> e) {
-        return e.getNodeB() != current
-                ? e.getNodeB()
-                : e.getNodeA();
-    }
-
-    private AntEdge<T> getNextEdge(AntNode<T> currentNode, double alpha, double beta) {
-        // Here we calculate the next edge the ant will take based on the ACO algorithm
-
-        // If the ant has seen the same number of nodes as there are nodes in the graph,
-        // the ant has to go to the end/start node
-        // This is just an optimization, the rest of the algorithm would yield the same edge
-        if(seenNodes.size() == numberOfNodes) {
-            return currentNode.getNeighbours().get(startNode);
-        }
-
-        // Get all edges which can be used by the ant
-        List<AntEdge<T>> possible = getPossibleEdges(currentNode, currentNode.getNeighbours().values().asList());
-        if (possible.size() == 0) {
-            throw new IllegalArgumentException("list of possible edges must not be empty");
-        }
-
-        // Now do the actual ACO calculation
-        HashMap<AntEdge<T>, Double> factors = new HashMap<>(possible.size() + 1);
-        double sumFactorBot = 0.0;
-
-        // calculate the factor for each possible edge
-        for(AntEdge<T> poss : possible) {
-            double factor = getFactor(poss.getPheromone(), poss.getDistance(), alpha, beta);
-            sumFactorBot += factor;
-            factors.put(poss, factor);
-        }
-
-        List<Double> props = new ArrayList<>(possible.size());
-        for(AntEdge<T> e : possible) {
-
-            if(sumFactorBot == 0.0) {
-                props.add(0.0);
-                continue;
-            }
-
-            // Algorithm
-            // p = factorTop / sumFactorBot
-            // where sumFactorBot = sum(z -> z.pheromone^alpha * (1/z.distance)^beta, possible)
-            // and factorTop = e.pheromone^alpha * (1/e.distance)^beta
-
-            // add probability to list of probabilities
-            props.add(factors.get(e) / sumFactorBot);
-        }
-
-        AntEdge<T> bestEdge = this.edgeSelector.select(possible, props);
-        if(bestEdge == null) {
-            throw new IllegalArgumentException("best edge must not be null");
-        }
-        return bestEdge;
-    }
-
-    private List<AntEdge<T>> getPossibleEdges(AntNode<T> current, List<AntEdge<T>> possible) {
-        // The ant has not seen any node yet, just return all edges.
-        if(seenNodes.isEmpty()) {
-            return possible;
-        }
-
-        List<AntEdge<T>> edges = new ArrayList<>(possible.size());
-
-
-        // A for loop is faster in this case
-        //noinspection ForLoopReplaceableByForEach
-        for(int i = 0; i < possible.size(); i++) {
-            AntEdge<T> e = possible.get(i);
-            AntNode<T> dest = getDestination(current, e);
-
-            if(dest.equals(startNode)) {
-                continue;
-            }
-
-            // Ignore nodes which the ant already visited
-            if(seenNodes.contains(dest)) {
-                continue;
-            }
-            edges.add(e);
-        }
-        return edges;
-    }
-
-    private double getFactor(double pheromone, double distance, double alpha, double beta) {
-        // Calculate the factor for the ACO
-        double tau = Math.pow(pheromone, alpha);
-        double ita = Math.pow(1 / distance, beta);
-        return tau * ita;
-    }
-
 }
