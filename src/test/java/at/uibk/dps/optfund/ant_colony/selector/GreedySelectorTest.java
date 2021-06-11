@@ -1,9 +1,10 @@
 package at.uibk.dps.optfund.ant_colony.selector;
 
-import at.uibk.dps.optfund.ant_colony.model.AbstractAntEdge;
+import at.uibk.dps.optfund.ant_colony.model.AntEdge;
 import at.uibk.dps.optfund.test_helper.TSPProvider;
 import org.junit.Assert;
 import org.junit.Test;
+import org.opt4j.tutorial.salesman.SalesmanProblem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,18 +13,18 @@ public class GreedySelectorTest {
 
     @Test
     public void greedySelector_OneHighestWeight_ChooseWithHighestWeight() {
-        List<AbstractAntEdge> streets = new ArrayList<>();
+        List<AntEdge<SalesmanProblem.City>> edges = new ArrayList<>();
         List<Double> weights = new ArrayList<>();
 
         for(int i = 0; i < 5; i++) {
-            streets.add(TSPProvider.getRandomStreet());
+            edges.add(TSPProvider.getRandomEdge());
             weights.add((double)i);
         }
 
         GreedySelector selector = new GreedySelector();
-        AbstractAntEdge chosen = selector.select(streets, weights);
+        AntEdge<SalesmanProblem.City> chosen = selector.select(edges, weights);
 
-        Assert.assertEquals(chosen, streets.get(4));
+        Assert.assertEquals(chosen, edges.get(4));
     }
 
     @Test
@@ -43,33 +44,33 @@ public class GreedySelectorTest {
     @Test
     public void greedySelector_NullWeights_ReturnsNull() {
         GreedySelector selector = new GreedySelector();
-        List<AbstractAntEdge> streets = new ArrayList<>();
-        streets.add(TSPProvider.getRandomStreet());
+        List<AntEdge<SalesmanProblem.City>> edges = new ArrayList<>();
+        edges.add(TSPProvider.getRandomEdge());
 
-        Assert.assertNull(selector.select(streets, null));
+        Assert.assertNull(selector.select(edges, null));
     }
 
     @Test
     public void greedySelector_EmptyWeights_ReturnsNull() {
         GreedySelector selector = new GreedySelector();
-        List<AbstractAntEdge> streets = new ArrayList<>();
-        streets.add(TSPProvider.getRandomStreet());
+        List<AntEdge<SalesmanProblem.City>> edges = new ArrayList<>();
+        edges.add(TSPProvider.getRandomEdge());
 
-        Assert.assertNull(selector.select(streets, new ArrayList<>()));
+        Assert.assertNull(selector.select(edges, new ArrayList<>()));
     }
 
     @Test
     public void greedySelector_EdgesAndWeightsDifferentSize_Throws() {
         GreedySelector selector = new GreedySelector();
-        List<AbstractAntEdge> streets = new ArrayList<>();
+        List<AntEdge<SalesmanProblem.City>> edges = new ArrayList<>();
         List<Double> weights = new ArrayList<>();
 
         for(int i = 0; i < 5; i++) {
-            streets.add(TSPProvider.getRandomStreet());
+            edges.add(TSPProvider.getRandomEdge());
             weights.add((double)i);
         }
         weights.add((double)1);
 
-        Assert.assertThrows(IllegalArgumentException.class, () -> selector.select(streets, weights));
+        Assert.assertThrows(IllegalArgumentException.class, () -> selector.select(edges, weights));
     }
 }

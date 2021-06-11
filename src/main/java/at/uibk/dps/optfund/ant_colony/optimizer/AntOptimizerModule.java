@@ -1,5 +1,7 @@
 package at.uibk.dps.optfund.ant_colony.optimizer;
 
+import at.uibk.dps.optfund.ant_colony.factory.AntNodeFactory;
+import at.uibk.dps.optfund.ant_colony.factory.AntNodeFactoryImpl;
 import org.opt4j.core.config.annotations.Info;
 import org.opt4j.core.config.annotations.Order;
 import org.opt4j.core.optimizer.MaxIterations;
@@ -7,7 +9,7 @@ import org.opt4j.core.optimizer.OptimizerModule;
 
 /**
  * The ant optimization module.
- * MaxIterations, PopulationSize and Offsize can be configured.
+ * @author Maximilian Suitner
  */
 public class AntOptimizerModule extends OptimizerModule {
 
@@ -27,6 +29,7 @@ public class AntOptimizerModule extends OptimizerModule {
      */
     @Override
     protected void config() {
+        bind(AntNodeFactory.class).to(AntNodeFactoryImpl.class).in(SINGLETON);
         bindIterativeOptimizer(AntOptimizer.class);
     }
 }

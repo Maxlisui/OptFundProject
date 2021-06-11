@@ -1,21 +1,17 @@
 package at.uibk.dps.optfund.ant_colony.selector;
 
-import at.uibk.dps.optfund.ant_colony.model.AbstractAntEdge;
+import at.uibk.dps.optfund.ant_colony.model.AntEdge;
 
 import java.util.List;
 
 /**
  * Greedy Selector -> take element with highest weight
+ * @author Daniel Eberharter
  */
 public class GreedySelector implements Selector {
 
-    /**
-     * @param elements the elements to select from
-     * @param weights the weight for each element
-     * @return the element with the highest weight
-     */
     @Override
-    public AbstractAntEdge select(List<AbstractAntEdge> elements, List<Double> weights) {
+    public <T> AntEdge<T> select(List<AntEdge<T>> elements, List<Double> weights) {
         if(elements == null || elements.size() == 0) {
             return null;
         }
@@ -29,7 +25,7 @@ public class GreedySelector implements Selector {
         }
 
         double maxWeight = Double.MIN_VALUE;
-        AbstractAntEdge element = null;
+        AntEdge<T> element = null;
 
         for(int i=0; i < weights.size(); i++) {
             if(weights.get(i) > maxWeight) {

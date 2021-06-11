@@ -1,8 +1,6 @@
 package at.uibk.dps.optfund.test_helper;
 
-import at.uibk.dps.optfund.tsp.model.City;
 import org.opt4j.benchmarks.DoubleString;
-import org.opt4j.core.genotype.PermutationGenotype;
 import org.opt4j.core.problem.Creator;
 
 import java.util.Random;

@@ -1,8 +1,6 @@
 package at.uibk.dps.optfund.ant_colony;
 
-import at.uibk.dps.optfund.ant_colony.model.AbstractAntEdge;
-import at.uibk.dps.optfund.ant_colony.model.AbstractAntNode;
-import at.uibk.dps.optfund.ant_colony.model.AntPath;
+import at.uibk.dps.optfund.ant_colony.model.*;
 import at.uibk.dps.optfund.ant_colony.selector.Selector;
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
@@ -13,8 +11,10 @@ import java.util.stream.Collectors;
 
 /**
  * An implementation for an ant colony
+ * @param <T> The type of data inside the node
+ * @author Maximilian Suitner
  */
-public class AntColonyImpl implements AntColony {
+public class AntColonyImpl<T> implements AntColony<T> {
 
     private final Selector edgeSelector;
     private final int numberOfAnts;
@@ -22,10 +22,10 @@ public class AntColonyImpl implements AntColony {
     private final double beta;
     private final double pheromoneFactor;
     private final double q;
-    private final ArrayList<Ant> ants = new ArrayList<>();
+    private final ArrayList<Ant<T>> ants = new ArrayList<>();
     private final Object lock = new Object();
 
-    private Set<AbstractAntEdge> edges = null;
+    private Set<AntEdge<T>> edges = null;
 
     /**
      * @param edgeSelector the selector which decides which path should be taken
@@ -54,12 +54,12 @@ public class AntColonyImpl implements AntColony {
      * @param startNode The start node where all ants start
      */
     @Override
-    public void init(AbstractAntNode startNode) {
+    public void init(AntNode<T> startNode) {
         this.edges = collectEdges(startNode, new HashSet<>(), new HashSet<>());
 
         int numberOfCities = startNode.getNeighbours().values().size();
         for(int i = 0; i < numberOfAnts; i++) {
-            ants.add(new Ant(i, startNode, numberOfCities, this.edgeSelector));
+            ants.add(new Ant<>(i, startNode, numberOfCities, this.edgeSelector));
         }
     }
 
@@ -69,14 +69,14 @@ public class AntColonyImpl implements AntColony {
      * @param accumulator accumulator for result
      * @return a set of all edges for the current node and all its neighbors
      */
-    private Set<AbstractAntEdge> collectEdges(AbstractAntNode node, Set<AbstractAntNode> alreadyDoneNodes, Set<AbstractAntEdge> accumulator) {
+    private Set<AntEdge<T>> collectEdges(AntNode<T> node, Set<AntNode<T>> alreadyDoneNodes, Set<AntEdge<T>> accumulator) {
 
         if(alreadyDoneNodes.contains(node)) {
             return accumulator;
         }
         alreadyDoneNodes.add(node);
 
-        ImmutableMap<AbstractAntNode, AbstractAntEdge> neighbors = node.getNeighbours();
+        ImmutableMap<AntNode<T>, AntEdge<T>> neighbors = node.getNeighbours();
         accumulator.addAll(node.getNeighbours().values());
         neighbors.keySet().forEach(x -> collectEdges(x, alreadyDoneNodes, accumulator));
         return accumulator;
@@ -86,11 +86,11 @@ public class AntColonyImpl implements AntColony {
      * @return the best path of this iteration
      */
     @Override
-    public Collection<Collection<AbstractAntNode>> next() {
-        Map<Ant, AntPath> pathsPerAnt = new HashMap<>();
+    public Collection<Collection<AntNode<T>>> next() {
+        Map<Ant<T>, AntPath<T>> pathsPerAnt = new HashMap<>();
 
         ants.parallelStream().forEach(x -> {
-            AntPath path = x.getPath(alpha, beta);
+            AntPath<T> path = x.getPath(alpha, beta);
 
             synchronized (lock) {
                 pathsPerAnt.put(x, path);
@@ -105,10 +105,10 @@ public class AntColonyImpl implements AntColony {
     /**
      * @param paths the paths the ants traveled
      */
-    private void updatePheromone(Map<Ant, AntPath> paths) {
+    private void updatePheromone(Map<Ant<T>, AntPath<T>> paths) {
         this.edges.parallelStream().forEach(x -> {
             double newPheromone = pheromoneFactor * x.getPheromone();
-            for(Ant ant : ants) {
+            for(Ant<T> ant : ants) {
                 newPheromone += ant.hasUsedEdge(x)
                         ? q / paths.get(ant).getCost()
                         : 0;

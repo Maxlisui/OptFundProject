@@ -1,5 +1,9 @@
 package at.uibk.dps.optfund.ant_colony;
 
+/**
+ * Constants with in the ant colony module for DI
+ * @author Maximilian Suitner
+ */
 public class AntConstants {
 
     public static final String NUMBER_OF_ANTS_CONSTANT = "numberOfAnts";

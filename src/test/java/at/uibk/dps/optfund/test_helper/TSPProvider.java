@@ -1,8 +1,8 @@
 package at.uibk.dps.optfund.test_helper;
 
-import at.uibk.dps.optfund.ant_colony.model.AbstractAntNode;
-import at.uibk.dps.optfund.tsp.model.City;
-import at.uibk.dps.optfund.tsp.model.Street;
+import at.uibk.dps.optfund.ant_colony.model.AntEdge;
+import at.uibk.dps.optfund.ant_colony.model.AntNode;
+import org.opt4j.tutorial.salesman.SalesmanProblem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,16 +11,18 @@ import java.util.Random;
 public class TSPProvider {
 
     private static final Random rnd = new Random(0);
+    private static final SalesmanProblem problem = new SalesmanProblem(0);
 
-    public static City getRandomCity() {
-        return new City(rnd.nextDouble(), rnd.nextDouble());
+    public static AntNode<SalesmanProblem.City> getRandomNode() {
+        SalesmanProblem.City city = problem.new City(rnd.nextDouble(), rnd.nextDouble());
+        return new AntNode<>(city, city.getX(), city.getY());
     }
 
-    public static Street getRandomStreet() {
-        return new Street(getRandomCity(), getRandomCity());
+    public static AntEdge<SalesmanProblem.City> getRandomEdge() {
+        return new AntEdge<>(getRandomNode(), getRandomNode());
     }
 
-    public static List<City> setupExampleGraph() {
+    public static List<AntNode<SalesmanProblem.City>> setupExampleGraph() {
         /*
         Setup a Graph like this where the numbers notate the weights
               A -----2----- B
@@ -30,12 +32,12 @@ public class TSPProvider {
               D -----2----- C
          */
 
-        List<City> result = new ArrayList<>();
+        List<AntNode<SalesmanProblem.City>> result = new ArrayList<>();
 
-        City a = new City(0.0, 0.0);
-        City b = new City(2.0, 0.0);
-        City c = new City(2.0, 2.0);
-        City d = new City(0.0, 2.0);
+        AntNode<SalesmanProblem.City> a = new AntNode<>(problem.new City(0.0, 0.0), 0.0, 0.0);
+        AntNode<SalesmanProblem.City> b = new AntNode<>(problem.new City(2.0, 0.0), 2.0, 0.0);
+        AntNode<SalesmanProblem.City> c = new AntNode<>(problem.new City(2.0, 2.0), 2.0, 2.0);
+        AntNode<SalesmanProblem.City> d = new AntNode<>(problem.new City(0.0, 2.0), 0.0, 2.0);
 
         result.add(a);
         result.add(b);
@@ -45,17 +47,17 @@ public class TSPProvider {
         final double defaultGoodPheromone = 10;
         final double defaultBadPheromone = 1;
 
-        Street ab = new Street(a, b);
+        AntEdge<SalesmanProblem.City> ab = new AntEdge<>(a, b);
         ab.setPheromone(defaultGoodPheromone);
-        Street ac = new Street(a, c);
+        AntEdge<SalesmanProblem.City> ac = new AntEdge<>(a, c);
         ac.setPheromone(defaultBadPheromone);
-        Street ad = new Street(a, d);
+        AntEdge<SalesmanProblem.City> ad = new AntEdge<>(a, d);
         ad.setPheromone(defaultGoodPheromone);
-        Street bc = new Street(b, c);
+        AntEdge<SalesmanProblem.City> bc = new AntEdge<>(b, c);
         bc.setPheromone(defaultGoodPheromone);
-        Street bd = new Street(b, d);
+        AntEdge<SalesmanProblem.City> bd = new AntEdge<>(b, d);
         bd.setPheromone(defaultBadPheromone);
-        Street cd = new Street(c, d);
+        AntEdge<SalesmanProblem.City> cd = new AntEdge<>(c, d);
         cd.setPheromone(defaultGoodPheromone);
 
         a.addNeighbour(b, ab);

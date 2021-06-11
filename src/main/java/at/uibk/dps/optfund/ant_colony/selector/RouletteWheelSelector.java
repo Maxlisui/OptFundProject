@@ -1,19 +1,20 @@
 package at.uibk.dps.optfund.ant_colony.selector;
 
-import at.uibk.dps.optfund.ant_colony.model.AbstractAntEdge;
+import at.uibk.dps.optfund.ant_colony.model.AntEdge;
 
 import java.util.List;
 import java.util.Random;
 
 /**
  * Selector base on Roulette Wheel Sampling
+ * @author Daniel Eberharter
  */
 public class RouletteWheelSelector implements Selector {
 
     private final Random rnd = new Random(0);
 
     @Override
-    public AbstractAntEdge select(List<AbstractAntEdge> elements, List<Double> weights) {
+    public <T> AntEdge<T> select(List<AntEdge<T>> elements, List<Double> weights) {
 
         if(elements == null || elements.size() == 0) {
             return null;
@@ -39,7 +40,7 @@ public class RouletteWheelSelector implements Selector {
             sum += w;
         }
 
-        AbstractAntEdge chosenElement = null;
+        AntEdge<T> chosenElement = null;
         double val = rnd.nextDouble() * sum;
         for(int i = 0; i < intervals.length; i++) {
             if(val <= intervals[i]) {
