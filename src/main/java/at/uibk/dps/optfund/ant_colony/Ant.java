@@ -57,7 +57,7 @@ public class Ant<T> {
             // Set the destination as current node and add it to the result
             AntEdge<T> edge = step(currentNode, alpha, beta);
 
-            currentNode = currentNode.getDesination(edge);
+            currentNode = currentNode.getDestination(edge);
             edges.add(edge);
             nodes.add(currentNode);
 
@@ -111,7 +111,7 @@ public class Ant<T> {
         AntEdge<T> edge = stepper.getNextEdge(currentNode, startNode, seenNodes, alpha, beta, numberOfNodes);
 
         usedEdges.add(edge);
-        currentNode = currentNode.getDesination(edge);
+        currentNode = currentNode.getDestination(edge);
         seenNodes.add(currentNode);
         return edge;
     }

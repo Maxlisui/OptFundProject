@@ -28,7 +28,7 @@ public class EdgeFilterImpl implements EdgeFilter {
         //noinspection ForLoopReplaceableByForEach
         for(int i = 0; i < possible.size(); i++) {
             AntEdge<T> e = possible.get(i);
-            AntNode<T> dest = currentNode.getDesination(e);
+            AntNode<T> dest = currentNode.getDestination(e);
 
             if(dest.equals(startNode)) {
                 continue;

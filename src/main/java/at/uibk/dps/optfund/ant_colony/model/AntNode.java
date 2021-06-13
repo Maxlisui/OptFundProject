@@ -65,7 +65,7 @@ public class AntNode<T> {
      * @param edge The edge
      * @return The destination node
      */
-    public AntNode<T> getDesination(AntEdge<T> edge) {
+    public AntNode<T> getDestination(AntEdge<T> edge) {
         return edge.getNodeB() != this
                 ? edge.getNodeB()
                 : edge.getNodeA();
