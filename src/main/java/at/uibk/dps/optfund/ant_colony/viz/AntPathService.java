@@ -24,30 +24,41 @@ import java.awt.*;
 @Singleton
 public class AntPathService implements IndividualMouseListener, OptimizerIterationListener, OptimizerStateListener {
     protected final Viewport viewport;
-    protected AntPathWidget widget;
-    protected final boolean vizOnStart;
     protected final Archive archive;
+    protected AntPathWidget widget;
+
+    @Inject
+    protected boolean vizOnStart;
+
+    @Inject
+    protected int vizDelay;
 
 
     // The path is shown by a double click of a individual in the archive
     // monitor panel. Thus we need the ArchiveMonitorPanel and the main
     // GUIFrame.
     @Inject
-    public AntPathService(Viewport viewport, boolean vizOnStart, Archive archive) {
+    public AntPathService(Viewport viewport, Archive archive) {
         this.viewport = viewport;
-        this.vizOnStart = vizOnStart;
         this.archive = archive;
     }
 
-    // Triggers if one full iteration completed.
+    // Triggers if one full iteration completed. Used to automatically update the path if visualization is enabled.
     @Override
     public void iterationComplete(int iteration) {
-        if(widget == null) {
+        if(!vizOnStart) {
             return; // no widget, nothing to do
         }
-        if(widget.getIndividual() == null && vizOnStart && archive.stream().findFirst().isPresent()) {
-            widget.setIndividual(archive.stream().findFirst().get());
+
+        if(vizDelay > 0) {
+            try {
+                Thread.sleep(vizDelay);
+            } catch (InterruptedException e) {
+                // ignore
+            }
         }
+
+        widget.setCurrentIteration(iteration);
         widget.getPanel().repaint();
     }
 
@@ -69,16 +80,14 @@ public class AntPathService implements IndividualMouseListener, OptimizerIterati
     // Paint the path: Construct a JInternalFrame, add the AntPathPanel and add the
     // frame to the desktop of the main GUIFrame.
     private void paintPath(Individual individual) {
-        if(widget == null) {
-            widget = new AntPathWidget(individual);
-            viewport.addWidget(widget);
-        }
+        viewport.addWidget(new AntPathWidget(individual));
     }
 
     @Override
     public void optimizationStarted(Optimizer optimizer) {
         if(vizOnStart) {
-            paintPath(null);
+            widget = new AntPathWidget(archive);
+            viewport.addWidget(widget);
         }
     }
 
@@ -88,28 +97,32 @@ public class AntPathService implements IndividualMouseListener, OptimizerIterati
 
     @WidgetParameters(title = "Route")
     protected static class AntPathWidget implements Widget {
-        Individual individual;
         AntPathPanel pathPanel;
 
         public AntPathWidget(Individual individual) {
             super();
-            this.individual = individual;
+            pathPanel = new AntPathPanel(individual);
+        }
+
+        public AntPathWidget(Archive archive) {
+            super();
+            pathPanel = new AntPathPanel(archive);
         }
 
         public Individual getIndividual() {
-            return individual;
+            return pathPanel.getIndividual();
         }
 
         public void setIndividual(Individual individual) {
-            this.individual = individual;
             pathPanel.setIndividual(individual);
+        }
+
+        public void setCurrentIteration(int iteration) {
+            pathPanel.setCurrentIteration(iteration);
         }
 
         @Override
         public JPanel getPanel() {
-            if(pathPanel == null) {
-                pathPanel = new AntPathPanel(individual);
-            }
             return pathPanel;
         }
 
@@ -123,11 +136,22 @@ public class AntPathService implements IndividualMouseListener, OptimizerIterati
         private static final long serialVersionUID = 1L;
 
         protected Individual individual;
+        protected Archive archive;
+        protected boolean singleMode;
+        protected int currentIteration = 0;
 
         public AntPathPanel(Individual individual) {
             super();
             this.individual = individual;
-            setPreferredSize(new Dimension(416, 416));
+            this.singleMode = true;
+            setPreferredSize(new Dimension(416, 436));
+        }
+
+        public AntPathPanel(Archive archive) {
+            super();
+            this.archive = archive;
+            this.singleMode = false;
+            setPreferredSize(new Dimension(416, 436));
         }
 
         public Individual getIndividual() {
@@ -138,8 +162,15 @@ public class AntPathService implements IndividualMouseListener, OptimizerIterati
             this.individual = individual;
         }
 
+        public void setCurrentIteration(int currentIteration) {
+            this.currentIteration = currentIteration;
+        }
+
         @Override
         protected void paintComponent(Graphics g) {
+            if(!singleMode) {
+                individual = archive.stream().findFirst().isPresent() ? archive.stream().findFirst().get() : null;
+            }
             if(individual == null) {
                 return; // nothing to do
             }
@@ -147,7 +178,12 @@ public class AntPathService implements IndividualMouseListener, OptimizerIterati
             g2d.setBackground(Color.WHITE);
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2d.setStroke(new BasicStroke(2f));
-            g2d.clearRect(0, 0, 416, 424);
+            g2d.clearRect(0, 0, 416, 436);
+
+            if(!singleMode) {
+                g2d.drawString(String.valueOf(currentIteration), 5, 430);
+            }
+            g2d.drawString(String.valueOf(individual.getObjectives().toString()), 150,430);
 
             SalesmanRoute salesmanRoute = (SalesmanRoute) individual.getPhenotype();
 

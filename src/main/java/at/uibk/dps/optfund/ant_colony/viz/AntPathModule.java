@@ -14,6 +14,10 @@ public class AntPathModule extends VisualizationModule {
     @Order(0)
     protected boolean vizOnStart = true;
 
+    @Info("Visualization delay in ms, for debugging only.")
+    @Order(1)
+    protected int vizDelay = 0;
+
     public boolean getVizOnStart() {
         return vizOnStart;
     }
@@ -22,9 +26,18 @@ public class AntPathModule extends VisualizationModule {
         this.vizOnStart = vizOnStart;
     }
 
+    public int getVizDelay() {
+        return vizDelay;
+    }
+
+    public void setVizDelay(int vizDelay) {
+        this.vizDelay = vizDelay;
+    }
+
     @Override
     protected void config() {
         bind(boolean.class).toInstance(vizOnStart);
+        bind(int.class).toInstance(vizDelay);
         addIndividualMouseListener(AntPathService.class);
         addOptimizerIterationListener(AntPathService.class);
         addOptimizerStateListener(AntPathService.class);
