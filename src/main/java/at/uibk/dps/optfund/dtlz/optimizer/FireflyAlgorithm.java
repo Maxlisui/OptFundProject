@@ -13,11 +13,13 @@ import org.opt4j.core.optimizer.IterativeOptimizer;
 import org.opt4j.core.optimizer.Population;
 import org.opt4j.core.start.Constant;
 import org.opt4j.optimizers.ea.Selector;
+import org.w3c.dom.ranges.Range;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Concrete implementation for firefly optimization
@@ -69,9 +71,9 @@ public class FireflyAlgorithm implements IterativeOptimizer {
 
         // first iteration -> initialize population -> one individual per firefly
         if(population.isEmpty()) {
-            for(int i = 0; i < numberOfFireflies; i++) {
-                population.add(individualFactory.create());
-            }
+            IntStream.range(0, numberOfFireflies)
+                    .parallel()
+                    .forEach(x -> population.add(individualFactory.create()));
         } else {
 
             final List<Firefly> fireflies = factory.createFireflies(population);
