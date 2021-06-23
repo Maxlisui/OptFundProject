@@ -63,6 +63,6 @@ public class FireflyFactoryImpl implements FireflyFactory {
      */
     @Override
     public List<Firefly> createFireflies(Population population) {
-        return population.stream().map(this::createFirefly).collect(Collectors.toList());
+        return population.parallelStream().map(this::createFirefly).collect(Collectors.toList());
     }
 }
