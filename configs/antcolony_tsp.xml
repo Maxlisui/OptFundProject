@@ -1,4 +1,10 @@
 <configuration>
+  <module class="at.uibk.dps.optfund.tsp.modules.TspSeedModule"/>
+  <module class="org.opt4j.core.common.random.RandomModule">
+    <property name="type">MERSENNE_TWISTER</property>
+    <property name="usingSeed">true</property>
+    <property name="seed">10</property>
+  </module>
   <module class="at.uibk.dps.optfund.ant_colony.AntColonyModule">
     <property name="numberOfAnts">160</property>
     <property name="alpha">1.0</property>
