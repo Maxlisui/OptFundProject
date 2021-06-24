@@ -14,7 +14,7 @@ public class Main {
         ea.setIterations(10000);
         ea.setAttractivenessCoefficient(0.5);
         ea.setLightAbsorptionCoefficient(0.001);
-        ea.setRandomWalkCoefficient(0.001);
+        ea.setRandomWalkCoefficient(0.003);
         ea.setNumberOfFireflies(50);
 
         DTLZModule dtlz = new DTLZModule();
