@@ -13,6 +13,8 @@ import org.opt4j.core.optimizer.IterativeOptimizer;
 import org.opt4j.core.optimizer.Population;
 import org.opt4j.core.start.Constant;
 import org.opt4j.optimizers.ea.Selector;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -30,7 +32,7 @@ public class FireflyAlgorithm implements IterativeOptimizer {
     private final FireflyFactory factory;
     private final FireflySelector fireflySelector;
     private final FitnessCalculator fitnessCalculator;
-    private List<Firefly> fireflies = null;
+    private final List<Firefly> fireflies;
     protected final int numberOfFireflies;
 
 
@@ -52,6 +54,7 @@ public class FireflyAlgorithm implements IterativeOptimizer {
         this.fireflySelector = fireflySelector;
         this.fitnessCalculator = fitnessCalculator;
         this.numberOfFireflies = numberOfFireflies;
+        this.fireflies = new ArrayList<>(numberOfFireflies);
     }
 
     /**
@@ -63,17 +66,12 @@ public class FireflyAlgorithm implements IterativeOptimizer {
         selector.init(numberOfFireflies);
 
         // initialize the list of fireflies (population)
-        this.fireflies = IntStream
-                .range(0, numberOfFireflies)
-                .boxed()
-                .collect(Collectors.toList())
-                .parallelStream()
-                .map(x -> {
-                    Individual individual = individualFactory.create();
-                    Firefly firefly = factory.createFirefly(individual);
-                    population.add(individual);
-                    return firefly;
-                }).collect(Collectors.toList());
+        for(int i=0; i < numberOfFireflies; i++) {
+            Individual individual = individualFactory.create();
+            Firefly firefly = factory.createFirefly(individual);
+            population.add(individual);
+            fireflies.add(firefly);
+        }
     }
 
     /**
