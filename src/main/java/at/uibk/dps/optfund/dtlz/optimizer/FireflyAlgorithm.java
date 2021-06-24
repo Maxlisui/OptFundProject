@@ -13,11 +13,7 @@ import org.opt4j.core.optimizer.IterativeOptimizer;
 import org.opt4j.core.optimizer.Population;
 import org.opt4j.core.start.Constant;
 import org.opt4j.optimizers.ea.Selector;
-import org.w3c.dom.ranges.Range;
-
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -33,7 +29,10 @@ public class FireflyAlgorithm implements IterativeOptimizer {
     private final ParticleMover particleMover;
     private final FireflyFactory factory;
     private final FireflySelector fireflySelector;
+    private final FitnessCalculator fitnessCalculator;
+    private List<Firefly> fireflies = null;
     protected final int numberOfFireflies;
+
 
     @Inject
     public FireflyAlgorithm(IndividualFactory individualFactory,
@@ -42,6 +41,7 @@ public class FireflyAlgorithm implements IterativeOptimizer {
                             ParticleMover particleMover,
                             FireflyFactory factory,
                             FireflySelector fireflySelector,
+                            FitnessCalculator fitnessCalculator,
                             @Constant(value = "numberOfFireflies", namespace = FireflyAlgorithmModule.class) int numberOfFireflies) {
 
         this.individualFactory = individualFactory;
@@ -50,6 +50,7 @@ public class FireflyAlgorithm implements IterativeOptimizer {
         this.particleMover = particleMover;
         this.factory = factory;
         this.fireflySelector = fireflySelector;
+        this.fitnessCalculator = fitnessCalculator;
         this.numberOfFireflies = numberOfFireflies;
     }
 
@@ -60,6 +61,19 @@ public class FireflyAlgorithm implements IterativeOptimizer {
     @Override
     public void initialize() {
         selector.init(numberOfFireflies);
+
+        // initialize the list of fireflies (population)
+        this.fireflies = IntStream
+                .range(0, numberOfFireflies)
+                .boxed()
+                .collect(Collectors.toList())
+                .parallelStream()
+                .map(x -> {
+                    Individual individual = individualFactory.create();
+                    Firefly firefly = factory.createFirefly(individual);
+                    population.add(individual);
+                    return firefly;
+                }).collect(Collectors.toList());
     }
 
     /**
@@ -69,35 +83,39 @@ public class FireflyAlgorithm implements IterativeOptimizer {
     @Override
     public void next() {
 
-        // first iteration -> initialize population -> one individual per firefly
-        if(population.isEmpty()) {
-            IntStream.range(0, numberOfFireflies)
-                    .parallel()
-                    .forEach(x -> population.add(individualFactory.create()));
-        } else {
+        // update fitness of fireflies
+        fireflies
+            .parallelStream()
+            .forEach(f -> f.setFitness(this.fitnessCalculator.calculateFitness(f)));
 
-            final List<Firefly> fireflies = factory.createFireflies(population);
+        // pick the best individual -> firefly with highest brightness
+        final Firefly bestIndividual = fireflySelector.getFittestFirefly(fireflies);
 
-            // pick the best individual -> firefly with highest brightness
-            final Firefly bestIndividual = fireflySelector.getFittestFirefly(fireflies);
-
-            // move all fireflies towards the firefly with the highest brightness
-            List<Individual> newPopulation = fireflies.parallelStream().map(i -> {
-
-                // bestIndividual does not move
-                if(i == bestIndividual) {
-                    return this.individualFactory.create(bestIndividual.getPosition());
-                }
-
+        // move all fireflies towards the firefly with the highest brightness
+        fireflies.parallelStream().forEach(i -> {
+            // bestIndividual does not move
+            if(i != bestIndividual) {
                 // move and create individual from new position
-                DoubleString newGenotype = particleMover.move(i , bestIndividual);
-                return this.individualFactory.create(newGenotype);
+                i.setPendingGenotypeUpdate(particleMover.move(i , bestIndividual));
+            } else {
+                i.setPendingGenotypeUpdate(null);
+            }
+        });
 
-            }).collect(Collectors.toList());
-
-            // update population
-            population.clear();
-            population.addAll(newPopulation);
-        }
+        // update new position in genotype
+        fireflies
+            .parallelStream()
+            .forEach(f -> {
+                DoubleString genotype = (DoubleString)f.getIndividual().getGenotype();
+                double[] pending = f.getPendingGenotypeUpdate();
+                // pending update is null for best individual
+                if(pending != null) {
+                    for(int i=0; i < genotype.size(); i++) {
+                        genotype.set(i, pending[i]);
+                    }
+                }
+                // set state to genotyped so opt4j does phenotyping/evaluation again
+                f.getIndividual().setState(Individual.State.GENOTYPED);
+            });
     }
 }

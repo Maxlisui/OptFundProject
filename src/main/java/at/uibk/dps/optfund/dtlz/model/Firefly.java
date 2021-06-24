@@ -1,6 +1,7 @@
 package at.uibk.dps.optfund.dtlz.model;
 
 import org.opt4j.benchmarks.DoubleString;
+import org.opt4j.core.Individual;
 
 /**
  * Represents a single firefly
@@ -8,17 +9,24 @@ import org.opt4j.benchmarks.DoubleString;
  */
 public class Firefly {
 
-    private final DoubleString position;
-    private final double fitness;
+    private final Individual individual;
+    private double fitness = 0;
+    private double[] pendingGenotypeUpdate = null;
 
     /**
-     * @param position the current position
-     * @param fitness the fitness (light intensity)
+     * @param individual the underlying individual
      * @author Daniel Eberharter
      */
-    public Firefly(DoubleString position, double fitness) {
-        this.position = position;
-        this.fitness = fitness;
+    public Firefly(Individual individual) {
+        this.individual = individual;
+    }
+
+    /**
+     * @return the wrapped individual
+     * @author Daniel Eberharter
+     */
+    public Individual getIndividual() {
+        return individual;
     }
 
     /**
@@ -30,10 +38,24 @@ public class Firefly {
     }
 
     /**
+     * @param fitness the fitness
+     * @author Daniel Eberharter
+     */
+    public void setFitness(double fitness) { this.fitness = fitness; }
+
+    /**
      * @return the position
      * @author Daniel Eberharter
      */
     public DoubleString getPosition() {
-        return position;
+        return (DoubleString) individual.getGenotype();
+    }
+
+    public double[] getPendingGenotypeUpdate() {
+        return pendingGenotypeUpdate;
+    }
+
+    public void setPendingGenotypeUpdate(double[] pendingGenotypeUpdate) {
+        this.pendingGenotypeUpdate = pendingGenotypeUpdate;
     }
 }

@@ -10,10 +10,10 @@
   </module>
   <module class="at.uibk.dps.optfund.dtlz.optimizer.FireflyAlgorithmModule">
     <property name="iterations">10000</property>
-    <property name="attractivenessCoefficient">1.0</property>
-    <property name="lightAbsorptionCoefficient">0.05</property>
-    <property name="randomWalkCoefficient">0.01</property>
-    <property name="numberOfFireflies">100</property>
+    <property name="attractivenessCoefficient">6.0</property>
+    <property name="lightAbsorptionCoefficient">0.01</property>
+    <property name="randomWalkCoefficient">0.02</property>
+    <property name="numberOfFireflies">50</property>
   </module>
   <module class="org.opt4j.viewer.ViewerModule">
     <property name="closeEvent">STOP</property>

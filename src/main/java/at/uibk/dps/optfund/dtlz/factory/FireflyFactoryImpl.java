@@ -16,30 +16,12 @@ import java.util.stream.Collectors;
  */
 public class FireflyFactoryImpl implements FireflyFactory {
 
-    private final FitnessCalculator fitnessCalculator;
-
     /**
      * Constructor
-     * @param fitnessCalculator service for calculating fitness
      * @author Daniel Eberharter
      */
     @Inject
-    public FireflyFactoryImpl(FitnessCalculator fitnessCalculator) {
-        this.fitnessCalculator = fitnessCalculator;
-    }
-
-    /**
-     * @param position the current position
-     * @param objectives the evaluated objective values
-     * @return the created firefly
-     * @author Daniel Eberharter
-     */
-    @Override
-    public Firefly createFirefly(DoubleString position, double[] objectives) {
-        if(position == null) {
-            throw new IllegalArgumentException("position");
-        }
-        return new Firefly(position, fitnessCalculator.calculateFitness(objectives));
+    public FireflyFactoryImpl() {
     }
 
     /**
@@ -49,11 +31,7 @@ public class FireflyFactoryImpl implements FireflyFactory {
      */
     @Override
     public Firefly createFirefly(Individual individual) {
-        double[] objectives = new double[0];
-        if(individual.isEvaluated()) {
-            objectives = individual.getObjectives().array();
-        }
-        return createFirefly((DoubleString) individual.getGenotype(), objectives);
+        return new Firefly(individual);
     }
 
     /**

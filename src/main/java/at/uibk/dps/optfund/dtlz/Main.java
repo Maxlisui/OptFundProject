@@ -12,10 +12,10 @@ public class Main {
     public static void main(String[] args) {
         FireflyAlgorithmModule ea = new FireflyAlgorithmModule();
         ea.setIterations(1000);
-        ea.setAttractivenessCoefficient(1.0);
-        ea.setLightAbsorptionCoefficient(0.05);
-        ea.setRandomWalkCoefficient(0.01);
-        ea.setNumberOfFireflies(100);
+        ea.setAttractivenessCoefficient(6.0);
+        ea.setLightAbsorptionCoefficient(0.01);
+        ea.setRandomWalkCoefficient(0.02);
+        ea.setNumberOfFireflies(50);
 
         DTLZModule dtlz = new DTLZModule();
         dtlz.setFunction(DTLZModule.Function.DTLZ1);

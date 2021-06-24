@@ -11,7 +11,7 @@ public class FitnessCalculatorImplTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testCalculateFitness_null_throws() {
-        fitnessCalculator.calculateFitness(null);
+        fitnessCalculator.calculateFitness((double[]) null);
     }
 
     @Test

@@ -10,14 +10,6 @@ import java.util.List;
 public interface FireflyFactory {
 
     /**
-     * @param position the current position
-     * @param objectives the evaluated objective values
-     * @return the created firefly
-     * @author Daniel Eberharter
-     */
-    Firefly createFirefly(DoubleString position, double[] objectives);
-
-    /**
      * @param individual a individual in the search space
      * @return the created firefly
      * @author Daniel Eberharter

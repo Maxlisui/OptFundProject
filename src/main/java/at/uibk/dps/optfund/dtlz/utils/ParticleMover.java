@@ -1,8 +1,6 @@
 package at.uibk.dps.optfund.dtlz.utils;
 
 import at.uibk.dps.optfund.dtlz.model.Firefly;
-import org.opt4j.benchmarks.DoubleString;
-import org.opt4j.core.Individual;
 
 /**
  * Service for moving particles
@@ -17,5 +15,5 @@ public interface ParticleMover {
      * @return the new position for particle
      * @author Daniel Eberharter
      */
-    DoubleString move(Firefly firefly, Firefly reference);
+    double[] move(Firefly firefly, Firefly reference);
 }

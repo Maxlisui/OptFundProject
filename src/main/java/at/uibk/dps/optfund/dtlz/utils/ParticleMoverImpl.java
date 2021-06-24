@@ -6,7 +6,6 @@ import com.google.inject.Inject;
 import org.opt4j.benchmarks.DoubleString;
 import org.opt4j.core.start.Constant;
 
-import java.util.Random;
 import java.util.SplittableRandom;
 import java.util.stream.IntStream;
 
@@ -26,7 +25,7 @@ public class ParticleMoverImpl implements ParticleMover {
      * Constructor
      * @param randomWalkCoefficient coefficient for random movement
      * @param attractivenessCoefficient coefficient for attractiveness between fireflies
-     * @param lightAbsorptionCoefficient coefficient for light absorbtion due to distance
+     * @param lightAbsorptionCoefficient coefficient for light absorption due to distance
      * @author Daniel Eberharter
      */
     @Inject
@@ -46,7 +45,7 @@ public class ParticleMoverImpl implements ParticleMover {
      * @author Daniel Eberharter
      */
     @Override
-    public DoubleString move(Firefly firefly, Firefly reference) {
+    public double[] move(Firefly firefly, Firefly reference) {
         if(firefly == null) {
             throw new IllegalArgumentException("firefly");
         }
@@ -57,11 +56,14 @@ public class ParticleMoverImpl implements ParticleMover {
         final double distance = calculateDistance(firefly.getPosition(), reference.getPosition());
         final DoubleString position = firefly.getPosition();
         final DoubleString refPosition = reference.getPosition();
+        // create array for updated position
+        // -> don't directly write back into firefly position because of race conditions
+        final double[] updatedPosition = new double[position.size()];
 
         IntStream.range(0, position.size())
                 .parallel()
-                .forEach(d -> position.set(d, calculateNewPosition(position.get(d), refPosition.get(d), distance)));
-        return position;
+                .forEach(d -> updatedPosition[d] = calculateNewPosition(position.get(d), refPosition.get(d), distance));
+        return updatedPosition;
     }
 
     /**
