@@ -11,10 +11,10 @@ public class Main {
 
     public static void main(String[] args) {
         FireflyAlgorithmModule ea = new FireflyAlgorithmModule();
-        ea.setIterations(1000);
-        ea.setAttractivenessCoefficient(6.0);
-        ea.setLightAbsorptionCoefficient(0.01);
-        ea.setRandomWalkCoefficient(0.02);
+        ea.setIterations(10000);
+        ea.setAttractivenessCoefficient(0.5);
+        ea.setLightAbsorptionCoefficient(0.001);
+        ea.setRandomWalkCoefficient(0.001);
         ea.setNumberOfFireflies(50);
 
         DTLZModule dtlz = new DTLZModule();

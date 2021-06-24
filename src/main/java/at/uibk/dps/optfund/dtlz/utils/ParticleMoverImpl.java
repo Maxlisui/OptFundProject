@@ -7,7 +7,6 @@ import org.opt4j.benchmarks.DoubleString;
 import org.opt4j.core.start.Constant;
 
 import java.util.SplittableRandom;
-import java.util.stream.IntStream;
 
 /**
  * Service for moving particles
@@ -53,6 +52,7 @@ public class ParticleMoverImpl implements ParticleMover {
             throw new IllegalArgumentException("reference");
         }
 
+        var rnd = new SplittableRandom();
         final double distance = calculateDistance(firefly.getPosition(), reference.getPosition());
         final DoubleString position = firefly.getPosition();
         final DoubleString refPosition = reference.getPosition();
@@ -60,9 +60,11 @@ public class ParticleMoverImpl implements ParticleMover {
         // -> don't directly write back into firefly position because of race conditions
         final double[] updatedPosition = new double[position.size()];
 
-        IntStream.range(0, position.size())
-                .parallel()
-                .forEach(d -> updatedPosition[d] = calculateNewPosition(position.get(d), refPosition.get(d), distance));
+        for(int d = 0; d < position.size(); d++) {
+            double randomWalk = randomWalkCoefficient * (rnd.nextDouble() - 0.5);
+            updatedPosition[d] = calculateNewPosition(position.get(d), refPosition.get(d), distance, randomWalk);
+        }
+
         return updatedPosition;
     }
 
@@ -89,11 +91,11 @@ public class ParticleMoverImpl implements ParticleMover {
      * @return the new position for firefly 1 and 2
      * @author Daniel Eberharter
      */
-    protected double calculateNewPosition(double p1, double p2, double distance) {
+    protected double calculateNewPosition(double p1, double p2, double distance, double randomWalk) {
 
         // x_i = x_i + beta*e^(delta*distance^2) + alpha * rand
         return p1
                 + attractivenessCoefficient * Math.exp(-lightAbsorptionCoefficient * Math.pow(distance, 2.0)) * (p2 - p1)
-                + randomWalkCoefficient * rnd.nextDouble();
+                + randomWalk;
     }
 }
