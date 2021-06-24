@@ -7,6 +7,8 @@ import org.opt4j.benchmarks.DoubleString;
 import org.opt4j.core.start.Constant;
 
 import java.util.Random;
+import java.util.SplittableRandom;
+import java.util.stream.IntStream;
 
 /**
  * Service for moving particles
@@ -14,7 +16,8 @@ import java.util.Random;
  */
 public class ParticleMoverImpl implements ParticleMover {
 
-    protected final Random rnd = new Random(0);
+    // SplittableRandom is several times faster than Random
+    protected final SplittableRandom rnd = new SplittableRandom(0);
     private final double randomWalkCoefficient;
     private final double attractivenessCoefficient;
     private final double lightAbsorptionCoefficient;
@@ -52,10 +55,13 @@ public class ParticleMoverImpl implements ParticleMover {
         }
 
         final double distance = calculateDistance(firefly.getPosition(), reference.getPosition());
-        for(int d = 0; d < firefly.getPosition().size(); d++) {
-            firefly.getPosition().set(d, calculateNewPosition(firefly.getPosition().get(d), reference.getPosition().get(d), distance));
-        }
-        return firefly.getPosition();
+        final DoubleString position = firefly.getPosition();
+        final DoubleString refPosition = reference.getPosition();
+
+        IntStream.range(0, position.size())
+                .parallel()
+                .forEach(d -> position.set(d, calculateNewPosition(position.get(d), refPosition.get(d), distance)));
+        return position;
     }
 
     /**
@@ -82,9 +88,10 @@ public class ParticleMoverImpl implements ParticleMover {
      * @author Daniel Eberharter
      */
     protected double calculateNewPosition(double p1, double p2, double distance) {
-        // x_i = x_i + beta*e^(delta*distance^2) + alpha(rand - 0.5)
+
+        // x_i = x_i + beta*e^(delta*distance^2) + alpha * rand
         return p1
                 + attractivenessCoefficient * Math.exp(-lightAbsorptionCoefficient * Math.pow(distance, 2.0)) * (p2 - p1)
-                + randomWalkCoefficient * (rnd.nextDouble() - 0.5);
+                + randomWalkCoefficient * rnd.nextDouble();
     }
 }

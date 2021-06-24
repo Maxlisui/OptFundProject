@@ -9,7 +9,7 @@
     <property name="bits">30</property>
   </module>
   <module class="at.uibk.dps.optfund.dtlz.optimizer.FireflyAlgorithmModule">
-    <property name="iterations">1000</property>
+    <property name="iterations">10000</property>
     <property name="attractivenessCoefficient">1.0</property>
     <property name="lightAbsorptionCoefficient">0.05</property>
     <property name="randomWalkCoefficient">0.01</property>
