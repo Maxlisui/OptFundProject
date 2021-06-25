@@ -1,5 +1,6 @@
 package at.uibk.dps.optfund.test_helper;
 
+import at.uibk.dps.optfund.ant_colony.AntConstants;
 import at.uibk.dps.optfund.ant_colony.model.AntEdge;
 import at.uibk.dps.optfund.ant_colony.model.AntNode;
 import org.opt4j.tutorial.salesman.SalesmanProblem;
@@ -19,7 +20,7 @@ public class TSPProvider {
     }
 
     public static AntEdge<SalesmanProblem.City> getRandomEdge() {
-        return new AntEdge<>(getRandomNode(), getRandomNode());
+        return new AntEdge<>(getRandomNode(), getRandomNode(), AntProvider.ALPHA, AntProvider.BETA);
     }
 
     public static List<AntNode<SalesmanProblem.City>> setupExampleGraph() {
@@ -47,17 +48,17 @@ public class TSPProvider {
         final double defaultGoodPheromone = 10;
         final double defaultBadPheromone = 1;
 
-        AntEdge<SalesmanProblem.City> ab = new AntEdge<>(a, b);
+        AntEdge<SalesmanProblem.City> ab = new AntEdge<>(a, b, AntProvider.ALPHA, AntProvider.BETA);
         ab.setPheromone(defaultGoodPheromone);
-        AntEdge<SalesmanProblem.City> ac = new AntEdge<>(a, c);
+        AntEdge<SalesmanProblem.City> ac = new AntEdge<>(a, c, AntProvider.ALPHA, AntProvider.BETA);
         ac.setPheromone(defaultBadPheromone);
-        AntEdge<SalesmanProblem.City> ad = new AntEdge<>(a, d);
+        AntEdge<SalesmanProblem.City> ad = new AntEdge<>(a, d, AntProvider.ALPHA, AntProvider.BETA);
         ad.setPheromone(defaultGoodPheromone);
-        AntEdge<SalesmanProblem.City> bc = new AntEdge<>(b, c);
+        AntEdge<SalesmanProblem.City> bc = new AntEdge<>(b, c, AntProvider.ALPHA, AntProvider.BETA);
         bc.setPheromone(defaultGoodPheromone);
-        AntEdge<SalesmanProblem.City> bd = new AntEdge<>(b, d);
+        AntEdge<SalesmanProblem.City> bd = new AntEdge<>(b, d, AntProvider.ALPHA, AntProvider.BETA);
         bd.setPheromone(defaultBadPheromone);
-        AntEdge<SalesmanProblem.City> cd = new AntEdge<>(c, d);
+        AntEdge<SalesmanProblem.City> cd = new AntEdge<>(c, d, AntProvider.ALPHA, AntProvider.BETA);
         cd.setPheromone(defaultGoodPheromone);
 
         a.addNeighbour(b, ab);

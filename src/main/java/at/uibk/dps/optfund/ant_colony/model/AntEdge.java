@@ -11,20 +11,27 @@ public class AntEdge<T> {
 
     private final AntNode<T> nodeA;
     private final AntNode<T> nodeB;
+    private final double alpha;
     private final double distance;
+    private final double distanceFactor;
     private final int hashValue;
 
-    // initialize each edge with some amount of pheromone
-    // this prevents initial problems with zero-probabilities
-    private double pheromone = 1.0;
+    private double weight;
+    private double pheromone;
 
-    public AntEdge(AntNode<T> nodeA, AntNode<T> nodeB) {
+    public AntEdge(AntNode<T> nodeA, AntNode<T> nodeB, double alpha, double beta) {
         this.nodeA = nodeA;
         this.nodeB = nodeB;
+        this.alpha = alpha;
         hashValue = Objects.hash(nodeA, nodeB);
         final double x = nodeA.getX() - nodeB.getX();
         final double y = nodeA.getY() - nodeB.getY();
         this.distance = Math.sqrt(x * x + y * y);
+        this.distanceFactor = Math.pow(1 / distance, beta);
+
+        // initialize each edge with some amount of pheromone
+        // this prevents initial problems with zero-probabilities
+        this.setPheromone(1.0);
     }
 
     /**
@@ -65,6 +72,7 @@ public class AntEdge<T> {
      */
     public void setPheromone(double pheromone) {
         this.pheromone = pheromone;
+        this.weight = Math.pow(pheromone, alpha) * this.distanceFactor;
     }
 
     @SuppressWarnings("unchecked")
@@ -79,5 +87,9 @@ public class AntEdge<T> {
     @Override
     public int hashCode() {
         return hashValue;
+    }
+
+    public double getEdgeWeight() {
+        return weight;
     }
 }
