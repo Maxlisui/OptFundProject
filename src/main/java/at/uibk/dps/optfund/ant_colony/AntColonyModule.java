@@ -13,12 +13,13 @@ import org.opt4j.core.optimizer.OptimizerModule;
 import org.opt4j.core.start.Constant;
 import org.opt4j.tutorial.salesman.SalesmanProblem;
 
+@SuppressWarnings("ALL")
 public class AntColonyModule extends OptimizerModule {
 
     @Info("The number of ants.")
     @Order(0)
     @Constant(value = AntConstants.NUMBER_OF_ANTS_CONSTANT, namespace = AntColonyImpl.class)
-    protected int numberOfAnts = 1000;
+    protected int numberOfAnts = 100;
 
     @Info("The alpha value (weight of pheromones).")
     @Order(1)
@@ -40,9 +41,18 @@ public class AntColonyModule extends OptimizerModule {
     @Constant(value = AntConstants.Q_CONSTANT, namespace = AntColonyImpl.class)
     protected double q = 500;
 
+    @Info("Limit how many edges will be considered for selection by each ant at a junction. The edges will be considered based on their fitness. 0 means that all edges will be considered.")
+    @Order(5)
+    @Constant(value = AntConstants.CONSIDERED_EDGES_CONSTANT, namespace = AntColonyImpl.class)
+    protected int consideredEdges = 0;
+
     public int getNumberOfAnts() { return numberOfAnts; }
 
     public void setNumberOfAnts(int numberOfAnts) { this.numberOfAnts = numberOfAnts; }
+
+    public int getConsideredEdges() { return consideredEdges; }
+
+    public void setConsideredEdges(int consideredEdges) { this.consideredEdges = consideredEdges; }
 
     public double getAlpha() {
         return alpha;

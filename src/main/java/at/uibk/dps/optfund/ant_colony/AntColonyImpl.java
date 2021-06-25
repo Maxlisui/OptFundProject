@@ -26,6 +26,7 @@ public class AntColonyImpl<T> implements AntColony<T> {
     private final Object lock = new Object();
 
     private Set<AntEdge<T>> edges = null;
+    private List<AntNode<T>> nodes;
 
     /**
      * @param stepper The stepping interface of ant which selects the next node
@@ -52,15 +53,20 @@ public class AntColonyImpl<T> implements AntColony<T> {
 
     /**
      * @param startNode The start node where all ants start
+     * @param nodes all nodes in the problem
      */
     @Override
-    public void init(AntNode<T> startNode) {
+    public void init(AntNode<T> startNode, List<AntNode<T>> nodes) {
         this.edges = collectEdges(startNode, new HashSet<>(), new HashSet<>());
+        this.nodes = nodes;
 
         int numberOfCities = startNode.getNeighbours().values().size();
         for(int i = 0; i < numberOfAnts; i++) {
             ants.add(new Ant<>(i, startNode, numberOfCities, stepper));
         }
+
+        // sort edges based on their weights
+        this.nodes.parallelStream().forEach(AntNode::sortNeighbourEdges);
     }
 
     /**
@@ -87,33 +93,39 @@ public class AntColonyImpl<T> implements AntColony<T> {
      */
     @Override
     public Collection<Collection<AntNode<T>>> next() {
-        Map<Ant<T>, AntPath<T>> pathsPerAnt = new HashMap<>();
+        List<AntPath<T>> paths = ants
+                .parallelStream()
+                .map(Ant::getPath)
+                .collect(Collectors.toList());
 
-        ants.parallelStream().forEach(x -> {
-            AntPath<T> path = x.getPath(alpha, beta);
+        updatePheromone(paths);
 
-            synchronized (lock) {
-                pathsPerAnt.put(x, path);
-            }
-        });
-
-        updatePheromone(pathsPerAnt);
-
-        return pathsPerAnt.values().stream().map(AntPath::getNodes).collect(Collectors.toList());
+        return paths.stream().map(AntPath::getNodes).collect(Collectors.toList());
     }
 
     /**
      * @param paths the paths the ants traveled
+     * @author Daniel Eberharter
      */
-    private void updatePheromone(Map<Ant<T>, AntPath<T>> paths) {
-        this.edges.parallelStream().forEach(x -> {
-            double newPheromone = pheromoneFactor * x.getPheromone();
-            for(Ant<T> ant : ants) {
-                newPheromone += ant.hasUsedEdge(x)
-                        ? q / paths.get(ant).getCost()
-                        : 0;
+    private void updatePheromone(List<AntPath<T>> paths) {
+
+        // pheromone decay
+        this.edges.parallelStream().forEach(x -> x.setPheromone(pheromoneFactor * x.getPheromone()));
+
+        // apply new pheromones
+        for (AntPath<T> p: paths) {
+            final double factor = q / p.getCost();
+            for(AntEdge<T> e: p.getEdges()) {
+                e.setPheromone(e.getPheromone() + factor);
             }
-            x.setPheromone(newPheromone);
+        }
+
+        // update edge weights and sort them corresponding to their weight
+        this.nodes.parallelStream().forEach(x -> {
+            // recalculate the weight of each edge (pheromones have changed)
+            x.getNeighbourEdges().forEach(AntEdge::updateEdgeWeight);
+            // resort edges based on their weights
+            x.sortNeighbourEdges();
         });
     }
 }

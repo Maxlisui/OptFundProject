@@ -35,11 +35,9 @@ public class Ant<T> {
 
     /**
      * Computes the path which the ant will take of the current state of the graph
-     * @param alpha Alpha value used for computing the probability which edge to take
-     * @param beta Beta value used for computing the probability which edge to take
      * @return An instance of an {@link AntPath}
      */
-    public AntPath<T> getPath(double alpha, double beta) {
+    public AntPath<T> getPath() {
         // First reset the ant and initialize the results
         reset();
         AntNode<T> currentNode = startNode;
@@ -55,7 +53,7 @@ public class Ant<T> {
         do {
             // Get the next edge and get the destination
             // Set the destination as current node and add it to the result
-            AntEdge<T> edge = step(currentNode, alpha, beta);
+            AntEdge<T> edge = step(currentNode);
 
             currentNode = currentNode.getDestination(edge);
             edges.add(edge);
@@ -105,10 +103,10 @@ public class Ant<T> {
         seenNodes.clear();
     }
 
-    private AntEdge<T> step(AntNode<T> currentNode, double alpha, double beta) {
+    private AntEdge<T> step(AntNode<T> currentNode) {
         // First get the next node, based on the ACO algorithm
         // And add it to the other side to the seen nodes and the used edges
-        AntEdge<T> edge = stepper.getNextEdge(currentNode, startNode, seenNodes, alpha, beta, numberOfNodes);
+        AntEdge<T> edge = stepper.getNextEdge(currentNode, startNode, seenNodes, numberOfNodes);
 
         usedEdges.add(edge);
         currentNode = currentNode.getDestination(edge);

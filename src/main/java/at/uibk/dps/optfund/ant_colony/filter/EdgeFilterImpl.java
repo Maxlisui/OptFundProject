@@ -6,6 +6,7 @@ import at.uibk.dps.optfund.ant_colony.model.AntNode;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of the edge filter for TSP
@@ -23,13 +24,13 @@ public class EdgeFilterImpl implements EdgeFilter {
 
         List<AntEdge<T>> edges = new ArrayList<>(possible.size());
 
-
         // A for loop is faster in this case
         //noinspection ForLoopReplaceableByForEach
         for(int i = 0; i < possible.size(); i++) {
             AntEdge<T> e = possible.get(i);
             AntNode<T> dest = currentNode.getDestination(e);
 
+            // move to destination at the end
             if(dest.equals(startNode)) {
                 continue;
             }

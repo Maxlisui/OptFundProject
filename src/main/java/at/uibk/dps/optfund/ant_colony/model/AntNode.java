@@ -2,9 +2,8 @@ package at.uibk.dps.optfund.ant_colony.model;
 
 import com.google.common.collect.ImmutableMap;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Represents a node in the graph used for ant optimization
@@ -13,8 +12,9 @@ import java.util.Objects;
  */
 public class AntNode<T> {
 
-    private final int hashValue;
+    private final UUID id = UUID.randomUUID();
     private final Map<AntNode<T>, AntEdge<T>> neighbours = new HashMap<>();
+    private final List<AntEdge<T>> neighbourEdges = new ArrayList<>();
     private final double x;
     private final double y;
     private final T internalObject;
@@ -23,7 +23,6 @@ public class AntNode<T> {
     public AntNode(T internalObject, double x, double y) {
         this.x = x;
         this.y = y;
-        this.hashValue = Objects.hash(x, y);
         this.internalObject = internalObject;
     }
 
@@ -58,6 +57,7 @@ public class AntNode<T> {
      */
     public void addNeighbour(AntNode<T> node, AntEdge<T> edge) {
         neighbours.put(node, edge);
+        neighbourEdges.add(edge);
     }
 
     /**
@@ -66,7 +66,7 @@ public class AntNode<T> {
      * @return The destination node
      */
     public AntNode<T> getDestination(AntEdge<T> edge) {
-        return edge.getNodeB() != this
+        return edge.getNodeB().id != this.id
                 ? edge.getNodeB()
                 : edge.getNodeA();
     }
@@ -82,17 +82,43 @@ public class AntNode<T> {
         return neighboursImmutable;
     }
 
+    /**
+     * @return the nodes edges
+     */
+    public List<AntEdge<T>> getNeighbourEdges() {
+        return neighbourEdges;
+    }
+
+    /**
+     * @param skip how many edges to skip
+     * @param limit how many edges to take
+     * @return the best N edges
+     */
+    public List<AntEdge<T>> getBestNeighbourEdges(int skip, int limit) {
+        if (limit <= 0) {
+            return neighbourEdges.stream().skip(skip).collect(Collectors.toList());
+        }
+        return neighbourEdges.stream().skip(skip).limit(limit).collect(Collectors.toList());
+    }
+
+    /**
+     * updates the edge order based on their weight
+     */
+    public void sortNeighbourEdges() {
+        this.neighbourEdges.sort((x,y) -> Double.compare(x.getEdgeWeight(), y.getEdgeWeight()) * -1);
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AntNode<T> node = (AntNode<T>) o;
-        return this.x == node.x && this.y == node.y;
+        return this.id == node.id;
     }
 
     @Override
     public int hashCode() {
-        return this.hashValue;
+        return this.id.hashCode();
     }
 }

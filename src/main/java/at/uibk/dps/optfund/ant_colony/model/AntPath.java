@@ -1,5 +1,6 @@
 package at.uibk.dps.optfund.ant_colony.model;
 
+import at.uibk.dps.optfund.ant_colony.Ant;
 import com.google.common.collect.ImmutableList;
 
 import java.util.Collection;
@@ -12,6 +13,7 @@ import java.util.Collection;
  */
 public class AntPath<T> {
 
+    private final Collection<AntEdge<T>> edges;
     private final ImmutableList<AntNode<T>> nodes;
     private final double cost;
 
@@ -21,6 +23,7 @@ public class AntPath<T> {
      * @param nodes The nodes taken by the ant
      */
     public AntPath(Collection<AntEdge<T>> edges, Collection<AntNode<T>> nodes) {
+        this.edges = edges;
         this.nodes = ImmutableList.copyOf(nodes);
         this.cost = this.calculateCost(edges);
     }
@@ -43,5 +46,9 @@ public class AntPath<T> {
 
     private double calculateCost(Collection<AntEdge<T>> edges) {
         return edges.stream().mapToDouble(AntEdge::getDistance).sum();
+    }
+
+    public Collection<AntEdge<T>> getEdges() {
+        return edges;
     }
 }
