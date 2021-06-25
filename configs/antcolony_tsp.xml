@@ -6,17 +6,18 @@
     <property name="seed">10</property>
   </module>
   <module class="at.uibk.dps.optfund.ant_colony.AntColonyModule">
-    <property name="numberOfAnts">160</property>
+    <property name="numberOfAnts">20</property>
     <property name="alpha">1.0</property>
     <property name="beta">5.0</property>
     <property name="ro">0.5</property>
     <property name="q">100</property>
+    <property name="consideredEdges">10</property>
   </module>
   <module class="at.uibk.dps.optfund.ant_colony.optimizer.AntOptimizerModule">
     <property name="iterations">500</property>
   </module>
   <module class="org.opt4j.tutorial.salesman.SalesmanModule">
-    <property name="size">200</property>
+    <property name="size">1000</property>
   </module>
   <module class="at.uibk.dps.optfund.ant_colony.viz.AntPathModule">
     <property name="vizOnStart">true</property>
