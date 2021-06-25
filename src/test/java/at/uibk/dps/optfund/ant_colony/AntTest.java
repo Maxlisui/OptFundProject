@@ -19,7 +19,7 @@ public class AntTest {
 
         Ant<SalesmanProblem.City> a = new Ant<>(0, TSPProvider.setupExampleGraph().get(0), numberOfNodes, AntProvider.createAntStepper());
 
-        AntPath<SalesmanProblem.City> path = a.getPath(AntProvider.ALPHA, AntProvider.BETA);
+        AntPath<SalesmanProblem.City> path = a.getPath();
 
         Assert.assertEquals(numberOfNodes + 1, path.getNodes().size());
     }
@@ -33,7 +33,7 @@ public class AntTest {
 
         Ant<SalesmanProblem.City> a = new Ant<>(0, startNode, numberOfNodes, AntProvider.createAntStepper());
 
-        a.getPath(AntProvider.ALPHA, AntProvider.BETA);
+        a.getPath();
 
         Assert.assertTrue(a.hasUsedEdge(startNode.getNeighbours().get(b)));
     }
@@ -49,7 +49,7 @@ public class AntTest {
 
         Ant<SalesmanProblem.City> a = new Ant<>(0, startNode, numberOfNodes, AntProvider.createAntStepper());
 
-        a.getPath(AntProvider.ALPHA, AntProvider.BETA);
+        a.getPath();
 
         Assert.assertTrue(a.hasUsedEdge(startNode.getNeighbours().get(b)));
         Assert.assertTrue(a.hasUsedEdge(b.getNeighbours().get(c)));
@@ -66,7 +66,7 @@ public class AntTest {
         SalesmanProblem problem = new SalesmanProblem(0);
         Ant<SalesmanProblem.City> a = new Ant<>(0, new AntNode<>(problem.new City(0.0, 0.0), 0.0, 0.0), numberOfNodes, AntProvider.createAntStepper());
 
-        Assert.assertThrows(IllegalArgumentException.class, () -> a.getPath(AntProvider.ALPHA, AntProvider.BETA));
+        Assert.assertThrows(IllegalArgumentException.class, a::getPath);
     }
 
 }

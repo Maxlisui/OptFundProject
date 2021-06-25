@@ -95,7 +95,7 @@ public class AntColonyImpl<T> implements AntColony<T> {
     public Collection<Collection<AntNode<T>>> next() {
         List<AntPath<T>> paths = ants
                 .parallelStream()
-                .map(x -> x.getPath(alpha, beta))
+                .map(Ant::getPath)
                 .collect(Collectors.toList());
 
         updatePheromone(paths);
