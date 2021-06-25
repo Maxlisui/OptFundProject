@@ -46,38 +46,19 @@ public class AntStepperImpl implements AntStepper {
         }
 
         // Get all edges which can be used by the ant
-        List<AntEdge<T>> possible = filter.getPossibleEdges(currentNode, currentNode.getNeighbours().values().asList(),
-                seenNodes, startNode);
+        List<AntEdge<T>> possible = filter.getPossibleEdges(currentNode,
+                currentNode.getNeighbours().values().asList(),
+                seenNodes,
+                startNode);
+
         if (possible.size() == 0) {
             throw new IllegalArgumentException("list of possible edges must not be empty");
         }
 
-        // Now do the actual ACO calculation
-        HashMap<AntEdge<T>, Double> factors = new HashMap<>(possible.size() + 1);
-        double sumFactorBot = 0.0;
-
-        // calculate the factor for each possible edge
-        for(AntEdge<T> poss : possible) {
-            double factor = getFactor(poss.getPheromone(), poss.getDistance(), alpha, beta);
-            sumFactorBot += factor;
-            factors.put(poss, factor);
-        }
-
         List<Double> props = new ArrayList<>(possible.size());
-        for(AntEdge<T> e : possible) {
-
-            if(sumFactorBot == 0.0) {
-                props.add(0.0);
-                continue;
-            }
-
-            // Algorithm
-            // p = factorTop / sumFactorBot
-            // where sumFactorBot = sum(z -> z.pheromone^alpha * (1/z.distance)^beta, possible)
-            // and factorTop = e.pheromone^alpha * (1/e.distance)^beta
-
+        for (AntEdge<T> e : possible) {
             // add probability to list of probabilities
-            props.add(factors.get(e) / sumFactorBot);
+            props.add(e.getEdgeWeight());
         }
 
         AntEdge<T> bestEdge = edgeSelector.select(possible, props);
@@ -85,12 +66,5 @@ public class AntStepperImpl implements AntStepper {
             throw new IllegalArgumentException("best edge must not be null");
         }
         return bestEdge;
-    }
-
-    private double getFactor(double pheromone, double distance, double alpha, double beta) {
-        // Calculate the factor for the ACO
-        double tau = Math.pow(pheromone, alpha);
-        double ita = Math.pow(1 / distance, beta);
-        return tau * ita;
     }
 }
