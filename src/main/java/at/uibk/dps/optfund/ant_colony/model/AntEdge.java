@@ -1,6 +1,7 @@
 package at.uibk.dps.optfund.ant_colony.model;
 
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * Represents an edge within the graph used for ant optimization
@@ -9,12 +10,12 @@ import java.util.Objects;
  */
 public class AntEdge<T> {
 
+    private final UUID id = UUID.randomUUID();
     private final AntNode<T> nodeA;
     private final AntNode<T> nodeB;
     private final double alpha;
     private final double distance;
     private final double distanceFactor;
-    private final int hashValue;
 
     private double weight;
     private double pheromone;
@@ -23,7 +24,6 @@ public class AntEdge<T> {
         this.nodeA = nodeA;
         this.nodeB = nodeB;
         this.alpha = alpha;
-        hashValue = Objects.hash(nodeA, nodeB);
         final double x = nodeA.getX() - nodeB.getX();
         final double y = nodeA.getY() - nodeB.getY();
         this.distance = Math.sqrt(x * x + y * y);
@@ -32,6 +32,7 @@ public class AntEdge<T> {
         // initialize each edge with some amount of pheromone
         // this prevents initial problems with zero-probabilities
         this.setPheromone(1.0);
+        this.updateEdgeWeight();
     }
 
     /**
@@ -70,8 +71,13 @@ public class AntEdge<T> {
      * Sets the current pheromone amount on the edge
      * @param pheromone the new pheromone amount on the edge
      */
-    public void setPheromone(double pheromone) {
-        this.pheromone = pheromone;
+    public void setPheromone(double pheromone) { this.pheromone = pheromone; }
+
+    /**
+     * updates the edges weight based on its pheromone level and length
+     * @author Daniel Eberharter
+     */
+    public void updateEdgeWeight() {
         this.weight = Math.pow(pheromone, alpha) * this.distanceFactor;
     }
 
@@ -81,12 +87,12 @@ public class AntEdge<T> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AntEdge<T> edge = (AntEdge<T>) o;
-        return hashValue == edge.hashValue;
+        return id == edge.id;
     }
 
     @Override
     public int hashCode() {
-        return hashValue;
+        return id.hashCode();
     }
 
     public double getEdgeWeight() {

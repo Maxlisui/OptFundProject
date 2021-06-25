@@ -51,7 +51,7 @@ public class AntOptimizer implements IterativeOptimizer {
         // The ant colony needs to know the start node, so we create a new genotype and get their first element.
         // This node will be used as the start/end node for all future calculations
         List<AntNode<SalesmanProblem.City>> nodes = antNodeFactory.mapGenotypes((PermutationGenotype<SalesmanProblem.City>)individualFactory.create().getGenotype());
-        antColony.init(nodes.get(0));
+        antColony.init(nodes.get(0), nodes);
     }
 
     /**

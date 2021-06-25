@@ -10,7 +10,7 @@ import org.opt4j.viewer.ViewerModule;
 public class Main {
 
     public static void main(String[] args) {
-        int numberOfCities = 200;
+        int numberOfCities = 1000;
         int iterations = 500;
 
         AntColonyModule ants = new AntColonyModule();
@@ -18,7 +18,8 @@ public class Main {
         ants.setBeta(5);
         ants.setRo(0.5);
         ants.setQ(100);
-        ants.setNumberOfAnts((int)(numberOfCities * 0.8));
+        ants.setNumberOfAnts(20);
+        ants.setConsideredEdges(10);
 
         AntOptimizerModule ea = new AntOptimizerModule();
         ea.setIterations(iterations);

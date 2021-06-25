@@ -11,5 +11,6 @@ public class AntConstants {
     public static final String BETA_CONSTANT = "beta";
     public static final String RO_CONSTANT = "ro";
     public static final String Q_CONSTANT = "q";
+    public static final String CONSIDERED_EDGES_CONSTANT = "consideredEdges";
 
 }
