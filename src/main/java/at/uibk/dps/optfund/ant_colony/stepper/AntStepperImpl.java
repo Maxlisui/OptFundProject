@@ -65,8 +65,13 @@ public class AntStepperImpl implements AntStepper {
         List<AntEdge<T>> possible;
         int skip = 0;
         do {
+            List<AntEdge<T>> bestEdges = currentNode.getBestNeighbourEdges(skip, consideredEdges);
+            if(bestEdges.size() == 0) {
+                throw new IllegalArgumentException("bestEdges must not be empty");
+            }
+
             possible = filter.getPossibleEdges(currentNode,
-                    currentNode.getBestNeighbourEdges(skip, consideredEdges),
+                    bestEdges,
                     seenNodes,
                     startNode);
             skip += consideredEdges;

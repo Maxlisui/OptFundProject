@@ -3,6 +3,7 @@ package at.uibk.dps.optfund.dtlz.factory;
 import at.uibk.dps.optfund.dtlz.model.Firefly;
 import at.uibk.dps.optfund.test_helper.MockFitnessCalculator;
 import at.uibk.dps.optfund.test_helper.MockDoubleStringCreator;
+import at.uibk.dps.optfund.test_helper.MockIndividual;
 import at.uibk.dps.optfund.test_helper.MockIndividualFactory;
 import org.junit.Assert;
 import org.junit.Test;
@@ -15,20 +16,19 @@ import java.util.List;
 public class FireflyFactoryImplTest {
 
     private final MockDoubleStringCreator creator = new MockDoubleStringCreator(10);
-    private final FireflyFactory fireflyFactory = new FireflyFactoryImpl(new MockFitnessCalculator());
+    private final FireflyFactory fireflyFactory = new FireflyFactoryImpl();
     private final MockIndividualFactory<DoubleString> individualFactory = new MockIndividualFactory<>(creator);
 
     @Test
     public void testCreateFirefly_validArguments_works() {
-        Firefly firefly = fireflyFactory.createFirefly(creator.create(), new double[] { 0 });
+        Firefly firefly = fireflyFactory.createFirefly(new MockIndividual());
         Assert.assertNotNull(firefly);
         Assert.assertNotNull(firefly.getPosition());
-        Assert.assertEquals(Double.MAX_VALUE, firefly.getFitness(), 0);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testCreateFirefly_invalidArguments_throws() {
-        fireflyFactory.createFirefly(null, new double[] { 0 });
+        fireflyFactory.createFirefly(null);
     }
 
     @Test
@@ -47,7 +47,6 @@ public class FireflyFactoryImplTest {
         for(int i=0; i < n; i++) {
             Assert.assertNotNull(fireflies.get(i));
             Assert.assertNotNull(fireflies.get(i).getPosition());
-            Assert.assertEquals(Double.MAX_VALUE, fireflies.get(i).getFitness(), 0);
         }
     }
 
@@ -58,6 +57,5 @@ public class FireflyFactoryImplTest {
         Firefly firefly = fireflyFactory.createFirefly(i);
         Assert.assertNotNull(firefly);
         Assert.assertNotNull(firefly.getPosition());
-        Assert.assertEquals(Double.MAX_VALUE, firefly.getFitness(), 0);
     }
 }

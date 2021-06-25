@@ -1,6 +1,7 @@
 package at.uibk.dps.optfund.dtlz.utils;
 
 import at.uibk.dps.optfund.dtlz.model.Firefly;
+import at.uibk.dps.optfund.test_helper.MockIndividual;
 import junit.framework.TestCase;
 import org.junit.Assert;
 import org.junit.Test;
@@ -17,7 +18,9 @@ public class FireflySelectorImplTest {
     public void testGetFittestFirefly() {
         List<Firefly> fireflies = new ArrayList<>();
         for(int i = 0; i < 10; i++) {
-            fireflies.add(new Firefly(new DoubleString(), i == 5 ? 2.0 : 1.0));
+            Firefly f = new Firefly(new MockIndividual());
+            f.setFitness(i == 5 ? 2.0 : 1.0);
+            fireflies.add(f);
         }
 
         Firefly fittest = fireflySelector.getFittestFirefly(fireflies);

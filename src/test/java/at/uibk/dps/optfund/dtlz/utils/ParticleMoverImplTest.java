@@ -1,9 +1,11 @@
 package at.uibk.dps.optfund.dtlz.utils;
 
 import at.uibk.dps.optfund.dtlz.model.Firefly;
+import at.uibk.dps.optfund.test_helper.MockIndividual;
 import junit.framework.TestCase;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.opt4j.benchmarks.DoubleString;
 
 import java.util.Random;
@@ -15,13 +17,13 @@ public class ParticleMoverImplTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testMove_arg1null_throws() {
-        Firefly f = new Firefly(new DoubleString(), 0);
+        Firefly f = new Firefly(new MockIndividual());
         mover.move(f, null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testMove_arg2null_throws() {
-        Firefly f = new Firefly(new DoubleString(), 0);
+        Firefly f = new Firefly(new MockIndividual());
         mover.move(null, f);
     }
 
@@ -62,7 +64,7 @@ public class ParticleMoverImplTest {
         double p1 = 10;
         double p2 = 50;
 
-        double res = mover.calculateNewPosition(p1, p2, Math.abs(p2-p1));
+        double res = mover.calculateNewPosition(p1, p2, Math.abs(p2-p1), 0);
         Assert.assertTrue(res > p1);
         Assert.assertTrue(res <= p2);
     }

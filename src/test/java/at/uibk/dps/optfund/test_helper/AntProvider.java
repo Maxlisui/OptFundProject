@@ -25,7 +25,7 @@ public class AntProvider {
     public static final int NUMBER_OF_CITIES = 10;
 
     public static AntStepper createAntStepper() {
-        return new AntStepperImpl(new EdgeFilterImpl(), new RouletteWheelSelector());
+        return new AntStepperImpl(new EdgeFilterImpl(), new RouletteWheelSelector(), 0);
     }
 
     public static AntColony<SalesmanProblem.City> createAntColony() {
@@ -69,7 +69,7 @@ public class AntProvider {
     }
 
     public static AntOptimizer createAntOptimizer(Population population, AntColony<SalesmanProblem.City> colony, SalesmanCreator creator) {
-        return createAntOptimizer(population, colony, creator, new AntNodeFactoryImpl());
+        return createAntOptimizer(population, colony, creator, new AntNodeFactoryImpl(AntProvider.ALPHA, AntProvider.BETA));
     }
 
     public static AntOptimizer createAntOptimizer(Population population, AntColony<SalesmanProblem.City> colony, SalesmanCreator creator, AntNodeFactory antNodeFactory) {

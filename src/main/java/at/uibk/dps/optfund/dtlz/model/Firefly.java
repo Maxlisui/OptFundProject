@@ -18,6 +18,9 @@ public class Firefly {
      * @author Daniel Eberharter
      */
     public Firefly(Individual individual) {
+        if(individual == null) {
+            throw new IllegalArgumentException("individual must not be null");
+        }
         this.individual = individual;
     }
 
